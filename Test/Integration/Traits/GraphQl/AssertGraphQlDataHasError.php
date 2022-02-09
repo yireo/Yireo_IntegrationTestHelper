@@ -6,9 +6,11 @@ trait AssertGraphQlDataHasError
 {
     protected function assertGraphQlDataHasError(string $errorString, array $queryData)
     {
-        $this->assertArrayHasKey('errors', $queryData);
-        $this->assertNotEmpty($queryData['errors']);
-        $this->assertArrayHasKey('message', $queryData['errors'][0]);
-        $this->assertStringContainsString($errorString, $queryData['errors'][0]['message'], var_export($queryData, true));
+        $queryResult = 'Query result: '.json_encode($queryData);
+
+        $this->assertArrayHasKey('errors', $queryData, $queryResult);
+        $this->assertNotEmpty($queryData['errors'], $queryResult);
+        $this->assertArrayHasKey('message', $queryData['errors'][0], $queryResult);
+        $this->assertStringContainsString($errorString, $queryData['errors'][0]['message'], $queryResult);
     }
 }

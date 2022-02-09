@@ -12,6 +12,8 @@ use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertInterceptorPluginI
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsEnabled;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegistered;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegisteredForReal;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertPreferenceOf;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertStoreConfigValueEquals;
 
 class AbstractTestCase extends TestCase
 {
@@ -20,6 +22,8 @@ class AbstractTestCase extends TestCase
     use AssertModuleIsEnabled;
     use AssertModuleIsRegistered;
     use AssertModuleIsRegisteredForReal;
+    use AssertStoreConfigValueEquals;
+    use AssertPreferenceOf;
 
     /**
      * @var ObjectManagerInterface
@@ -49,5 +53,17 @@ class AbstractTestCase extends TestCase
         $this->assertNotEmpty($modulePath, 'Module path is empty');
 
         return $modulePath;
+    }
+
+    protected function setDiTypeArgument(string $typeClass, array $arguments = [])
+    {
+        $this->objectManager->configure([
+            $typeClass => [
+                'shared' => false,
+                'arguments' => $arguments,
+            ],
+        ]);
+
+        $this->objectManager->create($typeClass);
     }
 }

@@ -3,11 +3,13 @@
 namespace Yireo\IntegrationTestHelper\Test\Integration;
 
 use Magento\GraphQl\Service\GraphQlRequest;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\GraphQl\AssertGraphQlDataHasData;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\GraphQl\AssertGraphQlDataHasError;
 
 class GraphQlTestCase extends AbstractTestCase
 {
     use AssertGraphQlDataHasError;
+    use AssertGraphQlDataHasData;
 
     /**
      * @param string $query
