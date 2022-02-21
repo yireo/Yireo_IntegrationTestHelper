@@ -42,6 +42,13 @@ class AbstractTestCase extends TestCase
         $applicationState->setAreaCode($areaCode);
     }
 
+
+    protected function setAreaCodeToFrontend()
+    {
+        $applicationState = $this->objectManager->get(State::class);
+        $applicationState->setAreaCode(Area::AREA_FRONTEND);
+    }
+
     protected function getModulePath(string $moduleName): string
     {
         $componentRegistrar = $this->objectManager->create(ComponentRegistrar::class);
