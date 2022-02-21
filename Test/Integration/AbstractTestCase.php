@@ -2,6 +2,7 @@
 
 namespace Yireo\IntegrationTestHelper\Test\Integration;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\ObjectManagerInterface;
