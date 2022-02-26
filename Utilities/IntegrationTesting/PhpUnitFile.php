@@ -113,6 +113,11 @@ class PhpUnitFile
             return $file;
         }
 
+        $file = $file . '.dist';
+        if (file_exists($file)) {
+            return $file;
+        }
+
         throw new FileNotFound(__(sprintf('%s not found', $file)));
     }
 
