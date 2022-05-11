@@ -11,7 +11,7 @@ trait AssertInterceptorPluginIsRegistered
     {
         $pluginList = Bootstrap::getObjectManager()->get(PluginList::class);
         $pluginInfo = $pluginList->get($subjectClass, []);
-        $this->assertArrayHasKey($pluginName, $pluginInfo);
+        $this->assertArrayHasKey($pluginName, $pluginInfo, var_export(array_keys($pluginInfo), true));
 
         $this->assertSame(
             $pluginClass,
