@@ -2,6 +2,7 @@
 
 namespace Yireo\IntegrationTestHelper\Test\Integration;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\ObjectManagerInterface;
@@ -40,6 +41,13 @@ class AbstractTestCase extends TestCase
     {
         $applicationState = $this->objectManager->get(State::class);
         $applicationState->setAreaCode($areaCode);
+    }
+
+
+    protected function setAreaCodeToFrontend()
+    {
+        $applicationState = $this->objectManager->get(State::class);
+        $applicationState->setAreaCode(Area::AREA_FRONTEND);
     }
 
     protected function getModulePath(string $moduleName): string

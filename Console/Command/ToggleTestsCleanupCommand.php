@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\IntegrationTestHelper\Console\Command\IntegrationTesting\PhpUnitFile;
+namespace Yireo\IntegrationTestHelper\Console\Command;
 
 use Magento\Framework\Exception\FileSystemException;
 
@@ -15,10 +15,10 @@ use Yireo\IntegrationTestHelper\Exception\IntegrationTesting\PhpUnitFile\Invalid
 use Yireo\IntegrationTestHelper\Utilities\IntegrationTesting\PhpUnitFile\Constant;
 
 /**
- * Class ToggleTestsCleanup
- * @package Yireo\IntegrationTestHelper\Console\Command\IntegrationTesting\PhpUnitFile
+ * Class ToggleTestsCleanupCommand
+ * @package Yireo\IntegrationTestHelper\Console\Command
  */
-class ToggleTestsCleanup extends Command
+class ToggleTestsCleanupCommand extends Command
 {
     /**
      * @var Constant
