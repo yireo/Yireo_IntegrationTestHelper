@@ -39,7 +39,7 @@ class DisableModules
      */
     public function enableByName(string $moduleName): DisableModules
     {
-        $this->disableModules = array_filter($this->disableModules, fn($module) => !$module === $moduleName);
+        $this->disableModules = array_filter($this->disableModules, fn($module) => $module !== $moduleName);
         return $this;
     }
 
@@ -117,6 +117,7 @@ class DisableModules
     public function get(): array
     {
         $this->disableDisabledAnyway();
+        sort($this->disableModules);
         return array_unique($this->disableModules);
     }
 
