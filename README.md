@@ -4,7 +4,7 @@ This module adds various utilities to aid in creating integration tests for Mage
 ## Installation
 Use the following commands to install:
 
-    composer require yireo/magento2-integration-test-helper:@dev --dev
+    composer require yireo/magento2-integration-test-helper --dev
 
 Enable this module:
 
