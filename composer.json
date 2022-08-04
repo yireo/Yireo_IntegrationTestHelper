@@ -1,7 +1,7 @@
 {
     "name": "yireo/magento2-integration-test-helper",
     "license": "OSL-3.0",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "type": "magento2-module",
     "homepage": "https://www.yireo.com/software/magento-extensions/",
     "description": "Magento 2 module to support integration tests in other modules",
