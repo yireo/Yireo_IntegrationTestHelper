@@ -16,7 +16,32 @@ Parent classes:
 - `\Yireo\IntegrationTestHelper\Test\Integration\AbstractTestCase`
 - `\Yireo\IntegrationTestHelper\Test\Integration\GraphQlTestCase`
 
-These classes offer some utility functions plus import numerous traits (see `Test/Integration/Traits/`) with PHPUnit assertions.
+These classes offer some utility functions plus import numerous traits (see `Test/Integration/Traits/`) with PHPUnit assertions. For instance, the following test checks for the proper registration of your module:
+
+```php
+<?php declare(strict_types=1);
+
+namespace Yireo\Example\Test\Integration;
+
+use PHPUnit\Framework\TestCase;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsEnabled;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegistered;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegisteredForReal;
+
+class ModuleTest extends TestCase
+{
+    use AssertModuleIsEnabled;
+    use AssertModuleIsRegistered;
+    use AssertModuleIsRegisteredForReal;
+
+    public function testIfModuleIsWorking()
+    {
+        $this->assertModuleIsEnabled('Yireo_Example');
+        $this->assertModuleIsRegistered('Yireo_Example');
+        $this->assertModuleIsRegisteredForReal('Yireo_Example');
+    }
+}
+```
 
 ## Toggle TESTS_CLEANUP in integration tests configuration
 When running integration tests, you probably want to frequently toggle the constant `TESTS_CLEANUP` from `disabled` to `enabled` to `disabled`. The following command-line easily allows for this (assuming the file is actually `dev/tests/integration/phpunit.xml` cause you shouldn't modify the `*.dist` version):
