@@ -2,19 +2,25 @@
 
 namespace Yireo\IntegrationTestHelper\Utilities;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\DirectoryList;
+
 class DisableModules
 {
+    private string $applicationRoot;
     private array $disableModules = [];
     private array $existingModules = [];
 
-    public function init()
+    public function __construct(string $applicationRoot)
     {
+        $this->applicationRoot = $applicationRoot;
         $this->existingModules = $this->getModulesFromConfig();
     }
 
     public function disableAll(): DisableModules
     {
         $this->disableModules = array_keys($this->existingModules);
+        return $this;
     }
 
     /**
@@ -85,7 +91,7 @@ class DisableModules
      */
     public function getModulesFromConfig(): array
     {
-        $config = require_once(__DIR__ . '/../../../../app/etc/config.php');
+        $config = require($this->applicationRoot . '/app/etc/config.php');
         return $config['modules'];
     }
 
