@@ -3,14 +3,21 @@
 namespace Yireo\IntegrationTestHelper\Test\Integration\Traits;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 trait AssertStoreConfigValueEquals
 {
-    protected function assertStoreConfigValueEquals($expectedValue, string $path)
+    protected function assertStoreConfigValueEquals($expectedValue, string $path, ?string $scopeType = null, ?string $scopeCode = null)
     {
-        $scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
-        $value = $scopeConfig->getValue($path);
+        $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        if ($scopeType === 'store' && empty($scopeCode)) {
+            $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+            $scopeCode = $storeManager->getDefaultStoreView();
+        }
+
+        $value = $scopeConfig->getValue($path, $scopeType, $scopeCode);
         $this->assertEquals($expectedValue, $value);
     }
 }
