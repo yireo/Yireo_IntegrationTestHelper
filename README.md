@@ -11,7 +11,7 @@ Enable this module:
     ./bin/magento module:enable Yireo_IntegrationTestHelper
     ./bin/magento setup:upgrade
 
-## Code usage
+## Using this helper to enhance your tests
 Parent classes:
 - `\Yireo\IntegrationTestHelper\Test\Integration\AbstractTestCase`
 - `\Yireo\IntegrationTestHelper\Test\Integration\GraphQlTestCase`
@@ -52,6 +52,21 @@ It is toggled. You can also set the value directly:
 
     bin/magento integration_tests:toggle_tests_cleanup enabled
 
+## Generating the `install-config-mysql.php` return array
+When installing Magento - as part of the procedure of running Integration Tests - the file `dev/tests/integration/etc/install-config-mysql.php` should return an array with all of your relevant settings, most importantly the database settings. By using the utility class `Yireo\IntegrationTestHelper\Utilities\InstallConfig` you can quickly generate the relevant output, plus details like Redis and ElasticSearch:
+
+```php
+<?php declare(strict_types=1);
+
+use Yireo\IntegrationTestHelper\Utilities\InstallConfig;
+
+return (new InstallConfig())
+    ->addDb('mysql80_tmpfs')
+    ->addRedis()
+    ->addElasticSearch('elasticsearch6')
+    ->get();
+```
+
 ## Disable modules when installing Magento
 When installing Magento - as part of the procedure of running Integration Tests - the file `dev/tests/integration/etc/install-config-mysql.php` is modified to point to your test database. There is also a flag `disable-modules` that allows you to disable specific Magento modules. Disabling modules is a benefit for performance. The utility class `Yireo\IntegrationTestHelper\Utilities\DisableModules` allows you to generate a listing of modules to disable quicker. 
 
@@ -60,6 +75,7 @@ In the following example, first all (!) modules that are listed in the global `a
 <?php declare(strict_types=1);
 
 use Yireo\IntegrationTestHelper\Utilities\DisableModules;
+use Yireo\IntegrationTestHelper\Utilities\InstallConfig;
 
 $disableModules = (new DisableModules())
     ->disableAll()
@@ -67,14 +83,20 @@ $disableModules = (new DisableModules())
     ->enableByName('Yireo_GoogleTagManager2')
     ->toString();
 
-return [
-    'db-host' => 'localhost',
-    'db-user' => 'root',
-    'db-password' => 'root',
-    'db-name' => 'magento2test',
-    ...
-    'disable-modules' => $disableModules
-];
+return (new InstallConfig())
+    ->setDisableModules($disableModules)
+    ->addDb('mysql80_tmpfs')
+    ->addRedis()
+    ->addElasticSearch('elasticsearch6')
+    ->get();
+```
+
+Instead of using a hard-coded value, you might also want to set an environment variable `MAGENTO_MODULE` - for instance, in the **Run** configuration in PHPStorm - which is then reused via the method `enableByMagentoModuleEnv`. This way, you can keep the same `install-config-mysql.php` file while reusing it for various **Run** configurations:
+
+```php
+$disableModules->disableAll()
+    ->enableMagento()
+    ->enableByMagentoModuleEnv();
 ```
 
 Another example, all the Magento modules are enabled by default. But then MSI and GraphQL are disabled again, while all Yireo modules are enabled:
