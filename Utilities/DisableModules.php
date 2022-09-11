@@ -2,6 +2,7 @@
 
 namespace Yireo\IntegrationTestHelper\Utilities;
 
+use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\DirectoryList;
 
@@ -31,6 +32,15 @@ class DisableModules
     {
         $this->disableModules = array_filter($this->disableModules, fn($module) => !preg_match('/^Magento_/', $module));
         return $this;
+    }
+
+    public function enableByMagentoModuleEnv()
+    {
+        if (empty($_SERVER['MAGENTO_MODULE'])) {
+            throw new InvalidArgumentException('Environment variable "MAGENTO_MODULE" is empty');
+        }
+
+        $this->enableByName($_SERVER['MAGENTO_MODULE']);
     }
 
     /**
