@@ -111,3 +111,26 @@ $disableModules = (new DisableModules())
 ```
 
 Note that if there would be a module `Yireo_ExampleGraphQl` then this would be first disabled with `disableGraphQl()` and then re-enabled again with `enableByPattern('Yireo_')`. The ordering of your methods matters!
+
+## Validating your configuration
+The module also ships with a CLI command to easily check whether the currently returned `setup:install` flags make sense:
+```bash
+$ bin/magento integration_tests:check
++--------------------+--------------------+
+| Setting            | Value              |
++--------------------+--------------------+
+| TESTS_CLEANUP      | enabled            |
+| TESTS_MAGENTO_MODE | developer          |
+| DB host            | mysql57_production |
+| DB username        | root               |
+| DB password        | root               |
+| DB name            | m2_test            |
+| DB reachable       | Yes                |
+| ES host            | localhost          |
+| ES port            | 9207               |
+| ES reachable       | Yes                |
+| Redis host         | 127.0.0.1          |
+| Redis port         | 6379               |
+| Redis reachable    | Yes                |
++--------------------+--------------------+
+```

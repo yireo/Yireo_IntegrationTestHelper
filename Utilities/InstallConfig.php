@@ -2,38 +2,24 @@
 
 namespace Yireo\IntegrationTestHelper\Utilities;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\Bootstrap;
+use phpDocumentor\Reflection\Types\Object_;
 
 class InstallConfig
 {
     private array $installConfig = [];
     private ?DisableModules $disableModules = null;
 
-    public function __construct(array $installConfig = [])
-    {
+    public function __construct(
+        array $installConfig = []
+    ) {
         $this->installConfig = $installConfig;
     }
 
     public function getDefault(): array
     {
-        return [
-            'db-host' => 'localhost',
-            'db-user' => 'root',
-            'db-password' => 'root',
-            'db-name' => 'magento2',
-            'db-prefix' => '',
-            'backend-frontname' => 'backend',
-            'admin-user' => Bootstrap::ADMIN_NAME,
-            'admin-password' => Bootstrap::ADMIN_PASSWORD,
-            'admin-email' => Bootstrap::ADMIN_EMAIL,
-            'admin-firstname' => Bootstrap::ADMIN_FIRSTNAME,
-            'admin-lastname' => Bootstrap::ADMIN_LASTNAME,
-            'search-engine' => 'elasticsearch7',
-            'elasticsearch-host' => 'localhost',
-            'elasticsearch-port' => '9200',
-            'allow-parallel-generation' => null,
-            'skip-db-validation' => null
-        ];
+        return ObjectManager::getInstance()->get(DefaultInstallConfig::class)->getValues();
     }
 
     public function setDisableModules(DisableModules $disableModules): InstallConfig

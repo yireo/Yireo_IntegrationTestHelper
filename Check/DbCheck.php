@@ -1,14 +1,24 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\IntegrationTestHelper\Utilities;
+namespace Yireo\IntegrationTestHelper\Check;
 
 use Laminas\Db\Adapter\Driver\Pdo\ConnectionFactory;
 use PDO;
+use Yireo\IntegrationTestHelper\Utilities\CurrentInstallConfig;
 
 class DbCheck
 {
-    public function checkDbConnection(array $config = []): bool
+    private CurrentInstallConfig $currentInstallConfig;
+    
+    public function __construct(
+        CurrentInstallConfig $currentInstallConfig
+    ) {
+        $this->currentInstallConfig = $currentInstallConfig;
+    }
+    
+    public function checkDbConnection(): bool
     {
+        $config = $this->currentInstallConfig->getValues();
         $host = $config['db-host'];
         $user = $config['db-user'];
         $pass = $config['db-password'];

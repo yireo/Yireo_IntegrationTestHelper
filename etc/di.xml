@@ -8,4 +8,6 @@
             </argument>
         </arguments>
     </type>
+
+    <preference for="Laminas\ServiceManager\ServiceLocatorInterface" type="Laminas\ServiceManager\ServiceManager"/>
 </config>
