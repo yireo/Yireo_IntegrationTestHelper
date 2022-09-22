@@ -3,8 +3,6 @@
 namespace Yireo\IntegrationTestHelper\Utilities;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\TestFramework\Bootstrap;
-use phpDocumentor\Reflection\Types\Object_;
 
 class InstallConfig
 {
@@ -19,7 +17,7 @@ class InstallConfig
 
     public function getDefault(): array
     {
-        return ObjectManager::getInstance()->get(DefaultInstallConfig::class)->getValues();
+        return (new DefaultInstallConfig())->getValues();
     }
 
     public function setDisableModules(DisableModules $disableModules): InstallConfig
