@@ -2,10 +2,13 @@
 
 namespace Yireo\IntegrationTestHelper\Test\Integration\Traits;
 
+use Magento\TestFramework\ObjectManager;
+
 trait AssertPreferenceOf
 {
     protected function assertPreferenceOf(string $expectedClass, string $injectableClass)
     {
-        $this->assertInstanceOf($expectedClass, $this->objectManager->get($injectableClass));
+        $objectManager = ObjectManager::getInstance();
+        $this->assertInstanceOf($expectedClass, $objectManager->get($injectableClass));
     }
 }
