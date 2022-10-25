@@ -77,9 +77,21 @@ class InstallConfig
         string $serverPort = '6379',
         int $redisDb = 1
     ): InstallConfig {
+        $this->installConfig['cache-backend'] = 'redis';
         $this->installConfig['cache-backend-redis-server'] = $serverName;
         $this->installConfig['cache-backend-redis-port'] = $serverPort;
         $this->installConfig['cache-backend-redis-db'] = $redisDb;
+
+        $this->installConfig['page-cache'] = 'redis';
+        $this->installConfig['page-cache-redis-server'] = $serverName;
+        $this->installConfig['page-cache-redis-port'] = $serverPort;
+        $this->installConfig['page-cache-redis-db'] = $redisDb;
+
+        $this->installConfig['session-save'] = 'redis';
+        $this->installConfig['session-save-redis-host'] = $serverName;
+        $this->installConfig['session-save-redis-port'] = $serverPort;
+        $this->installConfig['session-save-redis-db'] = $redisDb;
+        $this->installConfig['session-save-redis-max-concurrency'] = 20;
         return $this;
     }
 
