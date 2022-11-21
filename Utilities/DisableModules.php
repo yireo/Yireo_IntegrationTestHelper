@@ -11,19 +11,34 @@ class DisableModules
     private string $applicationRoot;
     private array $disableModules = [];
     private array $existingModules = [];
-    
+
     public function __construct(string $applicationRoot)
     {
-        $this->applicationRoot = $applicationRoot;
+        $this->setApplicationRoot($applicationRoot);
         $this->existingModules = $this->getModulesFromConfig();
     }
-    
+
+    private function setApplicationRoot(string $applicationRoot)
+    {
+        if (!is_dir($applicationRoot)) {
+            $msg = 'Application root "' . $applicationRoot . '" is not a directory';
+            throw new InvalidArgumentException($msg);
+        }
+
+        if (!is_file($applicationRoot . '/app/etc/config.php')) {
+            $msg = 'Application root "' . $applicationRoot . '" does not contain a Magento installation';
+            throw new InvalidArgumentException($msg);
+        }
+
+        $this->applicationRoot = $applicationRoot;
+    }
+
     public function disableAll(): DisableModules
     {
         $this->disableModules = array_keys($this->existingModules);
         return $this;
     }
-    
+
     /**
      * Enable all Magento core modules
      * @return $this
@@ -33,17 +48,17 @@ class DisableModules
         $this->disableModules = array_filter($this->disableModules, fn($module) => !preg_match('/^Magento_/', $module));
         return $this;
     }
-    
+
     public function enableByMagentoModuleEnv(): DisableModules
     {
         if (empty($_SERVER['MAGENTO_MODULE'])) {
             return $this;
         }
-        
+
         $this->enableByName($_SERVER['MAGENTO_MODULE']);
         return $this;
     }
-    
+
     /**
      * Enable a specific modules
      * @return $this
@@ -53,7 +68,7 @@ class DisableModules
         $this->disableModules = array_filter($this->disableModules, fn($module) => $module !== $moduleName);
         return $this;
     }
-    
+
     /**
      * Enable a specific modules
      * @return $this
@@ -63,7 +78,7 @@ class DisableModules
         $this->disableModules = array_filter($this->disableModules, fn($module) => !strstr($module, $pattern));
         return $this;
     }
-    
+
     /**
      * Include all modules with a certain pattern
      * @return $this
@@ -75,10 +90,10 @@ class DisableModules
                 $this->disableModules[] = $moduleName;
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      * @return $this
      */
@@ -87,14 +102,14 @@ class DisableModules
         if (!$this->isModuleEnabled('Swissup_SearchMysqlLegacy')) {
             return $this;
         }
-        
+
         $this->disableByPattern('Magento_InventoryElasticsearch');
         $this->disableByPattern('Magento_Elasticsearch7');
         $this->disableByPattern('Magento_Elasticsearch6');
         $this->disableByPattern('Magento_Elasticsearch');
         return $this;
     }
-    
+
     /**
      * Include all modules that are disabled
      * @return $this
@@ -103,7 +118,7 @@ class DisableModules
     {
         return $this->disableByPattern('Magento_Inventory');
     }
-    
+
     /**
      * Include all modules that are disabled
      * @return $this
@@ -112,7 +127,7 @@ class DisableModules
     {
         return $this->disableByPattern('GraphQl');
     }
-    
+
     /**
      * @return array
      */
@@ -121,8 +136,8 @@ class DisableModules
         $config = require($this->applicationRoot . '/app/etc/config.php');
         return $config['modules'];
     }
-    
-    
+
+
     /**
      * Include all modules that are disabled in the global configuration
      * @return $this
@@ -134,10 +149,10 @@ class DisableModules
                 $this->disableModules[] = $moduleName;
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      * @param string $moduleName
      * @return bool
@@ -147,10 +162,10 @@ class DisableModules
         if (!array_key_exists($moduleName, $this->existingModules)) {
             return false;
         }
-        
+
         return (bool)$this->existingModules[$moduleName];
     }
-    
+
     /**
      * @return array
      */
@@ -160,7 +175,7 @@ class DisableModules
         sort($this->disableModules);
         return array_unique($this->disableModules);
     }
-    
+
     /**
      * @return string
      */
