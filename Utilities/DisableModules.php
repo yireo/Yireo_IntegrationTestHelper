@@ -125,6 +125,10 @@ class DisableModules
      */
     public function disableGraphQl(): DisableModules
     {
+        if (!empty($_SERVER['MAGENTO_GRAPHQL']) && $_SERVER['MAGENTO_GRAPHQL'] === 1) {
+            return $this;
+        }
+
         return $this->disableByPattern('GraphQl');
     }
 
