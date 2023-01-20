@@ -12,14 +12,13 @@ use Yireo\IntegrationTestHelper\Exception\IntegrationTesting\PhpUnitFile\FileNot
 use Yireo\IntegrationTestHelper\Exception\IntegrationTesting\PhpUnitFile\InvalidContent;
 use Yireo\IntegrationTestHelper\Utilities\CurrentInstallConfig;
 use Yireo\IntegrationTestHelper\Check\DbCheck;
-use Yireo\IntegrationTestHelper\Utilities\IntegrationTesting\InstallConfig;
 use Yireo\IntegrationTestHelper\Utilities\IntegrationTesting\PhpUnitFile\Constant;
 use Yireo\IntegrationTestHelper\Check\SearchEngineCheck;
 
 class CheckCommand extends Command
 {
     private Constant $constant;
-    private InstallConfig|CurrentInstallConfig $currentInstallConfig;
+    private CurrentInstallConfig $currentInstallConfig;
     private DbCheck $dbCheck;
     private SearchEngineCheck $searchEngineCheck;
     private RedisCheck $redisCheck;
