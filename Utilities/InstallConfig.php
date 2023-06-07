@@ -61,6 +61,12 @@ class InstallConfig
         string $serverPort = '9200'
     ): InstallConfig {
         $this->installConfig['search-engine'] = $searchEngine;
+        if ($searchEngine === 'opensearch') {
+            $this->installConfig['opensearch-host'] = $serverName;
+            $this->installConfig['opensearch-port'] = $serverPort;
+            return $this;
+        }
+
         $this->installConfig['elasticsearch-host'] = $serverName;
         $this->installConfig['elasticsearch-port'] = $serverPort;
         return $this;
@@ -92,6 +98,8 @@ class InstallConfig
         $this->installConfig['session-save-redis-port'] = $serverPort;
         $this->installConfig['session-save-redis-db'] = $redisDb;
         $this->installConfig['session-save-redis-max-concurrency'] = 20;
+
+        $this->installConfig['allow-parallel-generation'] = true;
         return $this;
     }
 
