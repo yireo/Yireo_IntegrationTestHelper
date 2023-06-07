@@ -46,6 +46,7 @@ class InstallConfig
         $this->installConfig['db-password'] = $dbPassword;
         $this->installConfig['db-name'] = $dbName;
         $this->installConfig['db-prefix'] = $dbPrefix;
+        $this->installConfig['skip-db-validation'] = null;
         return $this;
     }
 
@@ -99,7 +100,7 @@ class InstallConfig
         $this->installConfig['session-save-redis-db'] = $redisDb;
         $this->installConfig['session-save-redis-max-concurrency'] = 20;
 
-        $this->installConfig['allow-parallel-generation'] = true;
+        $this->installConfig['allow-parallel-generation'] = null;
         return $this;
     }
 
