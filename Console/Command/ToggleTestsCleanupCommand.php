@@ -59,10 +59,12 @@ class ToggleTestsCleanupCommand extends Command
      * @throws InvalidContent
      * @throws FileSystemException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->toggleValue('dev/tests/integration/phpunit.xml', $input, $output);
         $this->toggleValue('dev/tests/quick-integration/phpunit.xml', $input, $output);
+
+        return Command::SUCCESS;
     }
 
     /**
