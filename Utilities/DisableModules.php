@@ -49,7 +49,6 @@ class DisableModules
         $this->disableModules = array_filter($this->disableModules, fn($module) => !preg_match('/^Magento_/', $module));
         $this->disableByPattern('SampleData');
         $this->disableByPattern('Magento_AdminAnalytics');
-        $this->disableByPattern('Magento_Adobe');
         return $this;
     }
     
