@@ -3,8 +3,6 @@
 namespace Yireo\IntegrationTestHelper\Utilities;
 
 use InvalidArgumentException;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Filesystem\DirectoryList;
 
 class DisableModules
 {
@@ -12,12 +10,21 @@ class DisableModules
     private array $disableModules = [];
     private array $existingModules = [];
 
+    /**
+     * @param string $applicationRoot
+     */
     public function __construct(string $applicationRoot)
     {
         $this->setApplicationRoot($applicationRoot);
         $this->existingModules = $this->getModulesFromConfig();
     }
 
+    /**
+     * Setup the Magento application root
+     *
+     * @param string $applicationRoot
+     * @return void
+     */
     private function setApplicationRoot(string $applicationRoot)
     {
         if (!is_dir($applicationRoot)) {
@@ -33,6 +40,11 @@ class DisableModules
         $this->applicationRoot = $applicationRoot;
     }
 
+    /**
+     * Disable all available modules (as they are listed in the app/etc/config.php file
+     *
+     * @return $this
+     */
     public function disableAll(): DisableModules
     {
         $this->disableModules = array_keys($this->existingModules);
@@ -41,6 +53,7 @@ class DisableModules
 
     /**
      * Enable all Magento core modules
+     *
      * @return $this
      */
     public function enableMagento(): DisableModules
@@ -49,6 +62,11 @@ class DisableModules
         return $this;
     }
 
+    /**
+     * Enable a specific module by looking up the environment variable MAGENTO_MODULE
+     *
+     * @return $this
+     */
     public function enableByMagentoModuleEnv(): DisableModules
     {
         if (empty($_SERVER['MAGENTO_MODULE'])) {
@@ -60,17 +78,20 @@ class DisableModules
     }
 
     /**
-     * Enable a specific modules
+     * Enable a specific module by its name (like "Foo_Bar")
+     *
      * @return $this
      */
     public function enableByName(string $moduleName): DisableModules
     {
-        $this->disableModules = array_filter($this->disableModules, fn($module) => $module !== $moduleName);
+        $moduleNames = explode(',', $moduleName);
+        $this->disableModules = array_filter($this->disableModules, fn($module) => !in_array($module, $moduleNames));
         return $this;
     }
 
     /**
      * Enable a specific modules
+     *
      * @return $this
      */
     public function enableByPattern(string $pattern): DisableModules
@@ -80,7 +101,19 @@ class DisableModules
     }
 
     /**
+     * Enable a specific modules
+     *
+     * @return $this
+     */
+    public function enableByRegexPattern(string $regex): DisableModules
+    {
+        $this->disableModules = array_filter($this->disableModules, fn($module) => !preg_match($regex, $module));
+        return $this;
+    }
+
+    /**
      * Include all modules with a certain pattern
+     *
      * @return $this
      */
     public function disableByPattern(string $pattern): DisableModules
@@ -95,6 +128,8 @@ class DisableModules
     }
 
     /**
+     * Enable the Swissup SearchMysqlLegacy module (to skip ElasticSearch)
+     *
      * @return $this
      */
     public function enableSwissupSearchMysqlLegacy(): DisableModules
@@ -112,6 +147,7 @@ class DisableModules
 
     /**
      * Include all modules that are disabled
+     *
      * @return $this
      */
     public function disableMagentoInventory(): DisableModules
@@ -121,6 +157,7 @@ class DisableModules
 
     /**
      * Include all modules that are disabled
+     *
      * @return $this
      */
     public function disableGraphQl(): DisableModules
@@ -133,6 +170,8 @@ class DisableModules
     }
 
     /**
+     * Get all modules from the configuration
+     *
      * @return array
      */
     public function getModulesFromConfig(): array
@@ -144,6 +183,7 @@ class DisableModules
 
     /**
      * Include all modules that are disabled in the global configuration
+     *
      * @return $this
      */
     private function disableDisabledAnyway(): DisableModules
@@ -158,6 +198,8 @@ class DisableModules
     }
 
     /**
+     * Check if a given module is enabled in this DisableModules configuration
+     *
      * @param string $moduleName
      * @return bool
      */
@@ -171,6 +213,8 @@ class DisableModules
     }
 
     /**
+     * Get all modules to disable
+     *
      * @return array
      */
     public function get(): array
@@ -181,6 +225,8 @@ class DisableModules
     }
 
     /**
+     * Return all modules as a CSV string
+     *
      * @return string
      */
     public function toString(): string
