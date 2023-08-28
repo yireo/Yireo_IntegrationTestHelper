@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
+// phpcs:ignoreFile
 
 $magentoRoot = $argv[1];
+
 require_once $magentoRoot . '/dev/tests/integration/framework/autoload.php';
 
 $file = $magentoRoot . '/dev/tests/integration/etc/install-config-mysql.php';

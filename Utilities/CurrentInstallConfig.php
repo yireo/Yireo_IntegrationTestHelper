@@ -45,7 +45,8 @@ class CurrentInstallConfig
         }
         
         $values = $this->defaultInstallConfig->getValues();
-        $values = array_merge($values, include($installConfig));
+        // phpcs:ignore
+        $values = array_merge($values, require($installConfig));
         return $values;
     }
     

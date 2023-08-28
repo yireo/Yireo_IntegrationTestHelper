@@ -46,6 +46,7 @@ class InstallConfig
     public function getConfigValues(): array
     {
         if (empty($this->configValues)) {
+            // phpcs:ignore
             $output = exec('php '.__DIR__.'/InstallConfigExec.php '.$this->directoryList->getRoot());
             $this->configValues = json_decode($output, true);
         }

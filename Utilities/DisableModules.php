@@ -179,6 +179,7 @@ class DisableModules
      */
     public function getModulesFromConfig(): array
     {
+        // phpcs:ignore
         $config = require($this->applicationRoot . '/app/etc/config.php');
         return $config['modules'];
     }
