@@ -1,7 +1,7 @@
 {
     "name": "yireo/magento2-integration-test-helper",
     "license": "OSL-3.0",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "type": "magento2-module",
     "homepage": "https://www.yireo.com/software/magento-extensions/",
     "description": "Magento 2 module to support integration tests in other modules",
@@ -19,7 +19,7 @@
     "require": {
         "magento/framework": "^101.0.1|^101.1|^102.0|^103.0",
         "symfony/finder": "^4.0 || ^5.0 || ^6.0",
-        "php": "7.4.*|8.0.*|8.1.*"
+        "php": "7.4.* || 8.0.* || 8.1.* || 8.2.*"
     },
     "require-dev": {
         "phpunit/phpunit": "*"
