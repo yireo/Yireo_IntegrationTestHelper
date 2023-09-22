@@ -7,9 +7,11 @@ use Magento\TestFramework\Interception\PluginList;
 
 trait AssertInterceptorPluginIsRegistered
 {
+    use GetObjectManager;
+
     protected function assertInterceptorPluginIsRegistered(string $subjectClass, string $pluginClass, string $pluginName)
     {
-        $pluginList = Bootstrap::getObjectManager()->get(PluginList::class);
+        $pluginList = $this->om()->get(PluginList::class);
         $pluginInfo = $pluginList->get($subjectClass, []);
         $this->assertArrayHasKey($pluginName, $pluginInfo, var_export(array_keys($pluginInfo), true));
 

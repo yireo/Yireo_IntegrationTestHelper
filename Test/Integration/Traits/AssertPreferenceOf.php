@@ -6,9 +6,10 @@ use Magento\TestFramework\ObjectManager;
 
 trait AssertPreferenceOf
 {
+    use GetObjectManager;
+
     protected function assertPreferenceOf(string $expectedClass, string $injectableClass)
     {
-        $objectManager = ObjectManager::getInstance();
-        $this->assertInstanceOf($expectedClass, $objectManager->get($injectableClass));
+        $this->assertInstanceOf($expectedClass, $this->om()->get($injectableClass));
     }
 }

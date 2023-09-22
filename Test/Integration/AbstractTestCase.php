@@ -15,9 +15,11 @@ use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegistered
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegisteredForReal;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertPreferenceOf;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertStoreConfigValueEquals;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\GetObjectManager;
 
 class AbstractTestCase extends TestCase
 {
+    use GetObjectManager;
     use AssertDiFileIsLoaded;
     use AssertInterceptorPluginIsRegistered;
     use AssertModuleIsEnabled;
@@ -28,6 +30,7 @@ class AbstractTestCase extends TestCase
 
     /**
      * @var ObjectManagerInterface
+     * @deprecated Use \Yireo\IntegrationTestHelper\Test\Integration\Traits\GetObjectManager instead
      */
     protected $objectManager;
 
@@ -39,20 +42,20 @@ class AbstractTestCase extends TestCase
 
     protected function setAreaCode($areaCode)
     {
-        $applicationState = $this->objectManager->get(State::class);
+        $applicationState = $this->om()->get(State::class);
         $applicationState->setAreaCode($areaCode);
     }
 
 
     protected function setAreaCodeToFrontend()
     {
-        $applicationState = $this->objectManager->get(State::class);
+        $applicationState = $this->om()->get(State::class);
         $applicationState->setAreaCode(Area::AREA_FRONTEND);
     }
 
     protected function getModulePath(string $moduleName): string
     {
-        $componentRegistrar = $this->objectManager->create(ComponentRegistrar::class);
+        $componentRegistrar = $this->om()->create(ComponentRegistrar::class);
 
         $modulePaths = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $this->assertArrayHasKey($moduleName, $modulePaths);
@@ -65,13 +68,13 @@ class AbstractTestCase extends TestCase
 
     protected function setDiTypeArgument(string $typeClass, array $arguments = [])
     {
-        $this->objectManager->configure([
+        $this->om()->configure([
             $typeClass => [
                 'shared' => false,
                 'arguments' => $arguments,
             ],
         ]);
 
-        $this->objectManager->create($typeClass);
+        $this->om()->create($typeClass);
     }
 }

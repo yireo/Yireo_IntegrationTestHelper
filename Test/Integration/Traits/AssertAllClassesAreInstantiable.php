@@ -8,12 +8,13 @@ use Symfony\Component\Finder\Finder;
 
 trait AssertAllClassesAreInstantiable
 {
+    use GetObjectManager;
+
     public function assertAllClassesAreInstantiable(
-        ObjectManagerInterface $objectManager,
         string $moduleName,
         string $baseNamespace
     ) {
-        $componentRegistrar = $objectManager->get(ComponentRegistrar::class);
+        $componentRegistrar = $this->om()->get(ComponentRegistrar::class);
         $modulePath = $componentRegistrar->getPath('module', $moduleName);
         $finder = new Finder();
         $finder->in($modulePath);

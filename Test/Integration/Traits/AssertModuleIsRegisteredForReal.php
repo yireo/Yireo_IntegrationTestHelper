@@ -10,16 +10,16 @@ use Magento\TestFramework\ObjectManager;
 
 trait AssertModuleIsRegisteredForReal
 {
+    use GetObjectManager;
+
     protected function assertModuleIsRegisteredForReal(string $moduleName)
     {
-        $objectManager = ObjectManager::getInstance();
-
-        $directoryList = $objectManager->create(DirectoryList::class, ['root' => BP]);
-        $deploymentConfigReader = $objectManager->create(DeploymentConfigReader::class, ['dirList' => $directoryList]);
-        $deploymentConfig = $objectManager->create(DeploymentConfig::class, ['reader' => $deploymentConfigReader]);
+        $directoryList = $this->om()->create(DirectoryList::class, ['root' => BP]);
+        $deploymentConfigReader = $this->om()->create(DeploymentConfigReader::class, ['dirList' => $directoryList]);
+        $deploymentConfig = $this->om()->create(DeploymentConfig::class, ['reader' => $deploymentConfigReader]);
 
         /** @var $moduleList ModuleList */
-        $moduleList = $objectManager->create(
+        $moduleList = $this->om()->create(
             ModuleList::class,
             ['config' => $deploymentConfig]
         );

@@ -9,11 +9,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 trait AssertStoreConfigValueEquals
 {
+    use GetObjectManager;
+
     protected function assertStoreConfigValueEquals($expectedValue, string $path, ?string $scopeType = null, ?string $scopeCode = null)
     {
-        $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $scopeConfig = $this->om()->get(ScopeConfigInterface::class);
         if ($scopeType === 'store' && empty($scopeCode)) {
-            $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
+            $storeManager = $this->om()->get(StoreManagerInterface::class);
             $scopeCode = $storeManager->getDefaultStoreView();
         }
 

@@ -4,12 +4,15 @@ namespace Yireo\IntegrationTestHelper\Test\Integration\Traits\Layout;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
+use Yireo\IntegrationTestHelper\Test\Integration\Traits\GetObjectManager;
 
 trait AssertHandleInLayout
 {
+    use GetObjectManager;
+
     public function assertHandleInLayout(string $handleName)
     {
-        $layout = ObjectManager::getInstance()->get(LayoutInterface::class);
+        $layout = $this->om()->get(LayoutInterface::class);
         $handles = $layout->getUpdate()->getHandles();
 
         $debugMsg = 'Handle "' . $handleName . '" is not found in layout: ';

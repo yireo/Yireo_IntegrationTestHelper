@@ -12,17 +12,17 @@ use Magento\TestFramework\Helper\Bootstrap;
 trait AssertDiFileIsLoaded
 {
     use AssertModuleIsRegistered;
+    use GetObjectManager;
 
     protected function assertDiFileIsLoaded(string $moduleName, string $areaCode = 'frontend')
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $applicationState = $objectManager->get(State::class);
+        $applicationState = $this->om()->get(State::class);
         $applicationState->setAreaCode($areaCode);
 
         $this->assertModuleIsRegistered($moduleName);
 
         /** @var ModuleDirReader $modulesReader */
-        $modulesReader = $objectManager->create(ModuleDirReader::class);
+        $modulesReader = $this->om()->create(ModuleDirReader::class);
         $configFiles = array_keys($modulesReader->getConfigurationFiles('di.xml')->toArray());
         $this->assertNotEmpty($configFiles);
 

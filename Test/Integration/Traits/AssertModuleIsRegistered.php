@@ -7,9 +7,11 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 trait AssertModuleIsRegistered
 {
+    use GetObjectManager;
+
     protected function assertModuleIsRegistered(string $moduleName)
     {
-        $registrar = Bootstrap::getObjectManager()->create(ComponentRegistrar::class);
+        $registrar = $this->om()->create(ComponentRegistrar::class);
         $this->assertArrayHasKey($moduleName, $registrar->getPaths(ComponentRegistrar::MODULE));
     }
 }
