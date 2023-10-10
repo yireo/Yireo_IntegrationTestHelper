@@ -11,6 +11,10 @@ trait AssertStoreConfigValueEquals
 {
     protected function assertStoreConfigValueEquals($expectedValue, string $path, ?string $scopeType = null, ?string $scopeCode = null)
     {
+        if (empty($scopeType)) {
+            $scopeType = 'default';
+        }
+
         $scopeConfig = ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         if ($scopeType === 'store' && empty($scopeCode)) {
             $storeManager = ObjectManager::getInstance()->get(StoreManagerInterface::class);
