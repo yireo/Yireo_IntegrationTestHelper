@@ -42,7 +42,7 @@ class AbstractTestCase extends TestCase
 
     protected function setAreaCode($areaCode)
     {
-        $applicationState = $this->om()->get(State::class);
+        $applicationState = $this->objectManager->get(State::class);
         $applicationState->setAreaCode($areaCode);
     }
 
