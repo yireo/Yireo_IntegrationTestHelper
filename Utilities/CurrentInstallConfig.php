@@ -15,7 +15,7 @@ class CurrentInstallConfig
     private DirectoryList $directoryList;
     private DefaultInstallConfig $defaultInstallConfig;
     private DriverInterface $fileDriver;
-    
+
     public function __construct(
         DirectoryList $directoryList,
         DefaultInstallConfig $defaultInstallConfig,
@@ -25,31 +25,32 @@ class CurrentInstallConfig
         $this->defaultInstallConfig = $defaultInstallConfig;
         $this->fileDriver = $filesystem->getDirectoryWrite(DirectoryList::PUB)->getDriver();
     }
-    
+
     /**
      * @return string[]
      */
     public function getValues(): array
     {
         $integrationTestsDir = $this->directoryList->getRoot() . '/dev/tests/integration/';
-        
+
         $testsBaseDir = $integrationTestsDir;
         $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
-        
+
         $autoloadWrapper->addPsr4('Magento\\TestFramework\\', "{$testsBaseDir}/framework/Magento/TestFramework/");
         $autoloadWrapper->addPsr4('Magento\\', "{$testsBaseDir}/testsuite/Magento/");
-        
+
         $installConfig = $integrationTestsDir . '/etc/install-config-mysql.php';
         if (!$this->fileDriver->isExists($installConfig)) {
             $installConfig = $installConfig . '.dist';
         }
-        
-        $values = $this->defaultInstallConfig->getValues();
+
         // phpcs:ignore
-        $values = array_merge($values, require($installConfig));
-        return $values;
+        $installConfigValues = require($installConfig);
+        $values = $this->defaultInstallConfig->getValues();
+
+        return array_merge($values, $installConfigValues);
     }
-    
+
     /**
      * @param string $key
      * @return string|null
@@ -60,7 +61,7 @@ class CurrentInstallConfig
         if (isset($values[$key])) {
             return $values[$key];
         }
-        
+
         return null;
     }
 }
