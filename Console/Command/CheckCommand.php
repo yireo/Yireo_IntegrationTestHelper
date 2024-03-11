@@ -22,7 +22,7 @@ class CheckCommand extends Command
     private DbCheck $dbCheck;
     private SearchEngineCheck $searchEngineCheck;
     private RedisCheck $redisCheck;
-    
+
     /**
      * @param Constant $constant
      * @param CurrentInstallConfig $currentInstallConfig
@@ -46,7 +46,7 @@ class CheckCommand extends Command
         $this->searchEngineCheck = $searchEngineCheck;
         $this->redisCheck = $redisCheck;
     }
-    
+
     /**
      * @return void
      */
@@ -55,7 +55,7 @@ class CheckCommand extends Command
         $this->setName('integration_tests:check')
             ->setDescription('Perform a simple check before running integration tests');
     }
-    
+
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -64,29 +64,31 @@ class CheckCommand extends Command
      * @throws FileNotFound
      * @throws InvalidContent
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $table = new Table($output);
         $table->setHeaders(['Setting', 'Value']);
         $table->addRow(['TESTS_CLEANUP', $this->constant->getValue('TESTS_CLEANUP')]);
         $table->addRow(['TESTS_MAGENTO_MODE', $this->constant->getValue('TESTS_MAGENTO_MODE')]);
         $table->addRow(['DB host', $this->currentInstallConfig->getValue('db-host')]);
-    
+
         $table->addRow(['DB username', $this->currentInstallConfig->getValue('db-user')]);
         $table->addRow(['DB password', $this->currentInstallConfig->getValue('db-password')]);
         $table->addRow(['DB name', $this->currentInstallConfig->getValue('db-name')]);
         $table->addRow(['DB reachable', $this->getDbReachable()]);
-    
+
         $table->addRow(['ES host', $this->currentInstallConfig->getValue('elasticsearch-host')]);
         $table->addRow(['ES port', $this->currentInstallConfig->getValue('elasticsearch-port')]);
         $table->addRow(['ES reachable', $this->getSearchEngineReachable()]);
-    
+
         $table->addRow(['Redis host', $this->currentInstallConfig->getValue('cache-backend-redis-server')]);
         $table->addRow(['Redis port', $this->currentInstallConfig->getValue('cache-backend-redis-port')]);
         $table->addRow(['Redis reachable', $this->getRedisReachable()]);
         $table->render();
+
+        return Command::SUCCESS;
     }
-    
+
     /**
      * @return string
      */
@@ -94,7 +96,7 @@ class CheckCommand extends Command
     {
         return $this->dbCheck->checkDbConnection() ? 'Yes' : 'No';
     }
-    
+
     /**
      * @return string
      */
@@ -102,7 +104,7 @@ class CheckCommand extends Command
     {
         return $this->searchEngineCheck->checkSearchEngineConnection() ? 'Yes' : 'No';
     }
-    
+
     /**
      * @return string
      */
