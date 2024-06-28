@@ -35,8 +35,6 @@ class TestGenerator
         $this->moduleTestGenerator->generate($moduleName, $classNamePrefix, $classPath);
 
         $phpClasses = $this->getPhpClasses($modulePath);
-        print_r($phpClasses);
-        exit;
         foreach ($phpClasses as $phpClass) {
             $this->genericTestGenerator->generate($phpClass, $classNamePrefix, $classPath);
         }
@@ -66,8 +64,6 @@ class TestGenerator
             $file = $file[0];
             $classes[$file] = $this->getClassFromFile((string)$file);
         }
-
-        print_r($classes);exit;
 
         return $classes;
     }
