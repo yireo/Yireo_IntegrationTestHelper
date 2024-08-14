@@ -2,38 +2,39 @@
 
 namespace Yireo\IntegrationTestHelper\Generator;
 
-use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsEnabled;
-use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegistered;
-use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegisteredForReal;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\GetObjectManager;
 
 class GenericTestGenerator
 {
-
     public function __construct(
         private PhpGeneratorFactory $phpGeneratorFactory,
     ) {
     }
 
-    public function generate(string $className, string $classNamePrefix, string $classPath): bool
+    public function generate(ClassStub $classStub, string $modulePath): bool
     {
-        $phpGenerator = $this->phpGeneratorFactory->create($className, $classNamePrefix);
+        $testClassStub = TestClassStub::generateFromOriginalClassStub($classStub);
+        $testClassName = $testClassStub->getClassName();
+
+        $phpGenerator = $this->phpGeneratorFactory->create($testClassName, $testClassStub->getNamespace());
         $phpGenerator->addTrait(GetObjectManager::class);
+        $phpGenerator->addUse($classStub->getFullQualifiedClassName());
 
+        $phpGenerator->addClassMethod('testIfInstantiationWorks', $this->getTestIfInstantiationWorks($classStub->getClassName()));
 
-        $phpGenerator->addClassMethod('testModule', $this->getMethodModuleTest($moduleName));
+        $file = $modulePath . '/' .$testClassStub->getRelativeNamespace() . '/' . $testClassName.'.php';
+        $file = str_replace('\\','/', $file);
 
-        $file = 'ModuleTest.php';
-        return $phpGenerator->generate($classPath . '/' . $file);
+        return $phpGenerator->generate($file);
     }
 
-    private function getMethodModuleTest(string $moduleName): string
+    private function getTestIfInstantiationWorks(string $className): string
     {
+        $variableName = lcfirst($className);
+
         return <<<EOF
-\$moduleName = '$moduleName';
-\$this->assertModuleIsEnabled(\$moduleName);
-\$this->assertModuleIsRegistered(\$moduleName);
-\$this->assertModuleIsRegisteredForReal(\$moduleName);
+\${$variableName} = \$this->om()->get({$className}::class);
+\$this->assertInstanceOf({$className}::class, \${$variableName});
 EOF;
     }
 }

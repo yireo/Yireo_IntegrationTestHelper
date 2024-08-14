@@ -13,7 +13,7 @@ class ModuleTestGenerator
     ) {
     }
 
-    public function generate(string $moduleName, string $classNamePrefix, string $classPath): bool
+    public function generate(string $moduleName, string $classNamePrefix, string $modulePath): bool
     {
         $phpGenerator = $this->phpGeneratorFactory->create('ModuleTest', $classNamePrefix);
         $phpGenerator->addTrait(AssertModuleIsEnabled::class);
@@ -21,8 +21,7 @@ class ModuleTestGenerator
         $phpGenerator->addTrait(AssertModuleIsRegisteredForReal::class);
         $phpGenerator->addClassMethod('testModule', $this->getMethodModuleTest($moduleName));
 
-        $file = 'ModuleTest.php';
-        return $phpGenerator->generate($classPath . '/' . $file);
+        return $phpGenerator->generate($modulePath . '/Test/Integration/ModuleTest.php');
     }
 
     private function getMethodModuleTest(string $moduleName): string

@@ -29,7 +29,12 @@ class PhpGenerator
     public function addTrait(string $traitName)
     {
         $this->classType->addTrait($traitName);
-        $this->namespace->addUse($traitName);
+        $this->addUse($traitName);
+    }
+
+    public function addUse(string $namespace)
+    {
+        $this->namespace->addUse($namespace);
     }
 
     public function generate(string $file):bool

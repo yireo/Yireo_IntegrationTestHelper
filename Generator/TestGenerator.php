@@ -28,15 +28,17 @@ class TestGenerator
         $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
         $this->createFolder($modulePath.'/Test/Integration/');
 
-        $classPath = $modulePath.'/Test/Integration/';
         $classNamePrefix = $this->getClassNamePrefix($moduleName);
 
-        $output->writeln('Generating module test in '.$classPath);
-        $this->moduleTestGenerator->generate($moduleName, $classNamePrefix, $classPath);
+        $output->writeln('Generating module test');
+        $this->moduleTestGenerator->generate($moduleName, $classNamePrefix, $modulePath);
 
         $phpClasses = $this->getPhpClasses($modulePath);
+
         foreach ($phpClasses as $phpClass) {
-            $this->genericTestGenerator->generate($phpClass, $classNamePrefix, $classPath);
+            $output->writeln('Generating test for '.$phpClass);
+            $classStub = new ClassStub($moduleName, $phpClass);
+            $this->genericTestGenerator->generate($classStub, $modulePath);
         }
     }
 
@@ -62,15 +64,24 @@ class TestGenerator
 
         foreach ($regex as $file) {
             $file = $file[0];
-            $classes[$file] = $this->getClassFromFile((string)$file);
+            if (strstr($file, '/Test/')) {
+                continue;
+            }
+
+            $class = $this->getClassNameFromFile((string)$file);
+            if (empty($class)) {
+                continue;
+            }
+
+            $classes[$file] = $class;
         }
 
         return $classes;
     }
 
-    private function getClassFromFile(string $file): array
+    private function getClassNameFromFile(string $file): string
     {
-        $classes   = [];
+        $className = '';
         $namespace = '';
         $tokens    = PhpToken::tokenize(file_get_contents($file));
 
@@ -91,14 +102,14 @@ class TestGenerator
                     }
 
                     if ($tokens[$j]->getTokenName() === 'T_STRING') {
-                        $classes[] = $namespace . '\\' . $tokens[$j]->text;
+                        $className = $namespace . '\\' . $tokens[$j]->text;
                     } else {
                         break;
                     }
                 }
             }
         }
-        return $classes;
 
+        return $className;
     }
 }
