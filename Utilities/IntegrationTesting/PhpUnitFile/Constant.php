@@ -51,7 +51,7 @@ class Constant
             return $match[2];
         }
 
-        throw new ConstantNotFound(__('Unable to find constant'));
+        throw new ConstantNotFound((string)__('Unable to find constant'));
     }
 
     /**

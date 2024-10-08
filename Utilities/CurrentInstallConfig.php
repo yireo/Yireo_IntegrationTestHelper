@@ -3,6 +3,7 @@
 namespace Yireo\IntegrationTestHelper\Utilities;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -34,7 +35,7 @@ class CurrentInstallConfig
         $integrationTestsDir = $this->directoryList->getRoot() . '/dev/tests/integration/';
 
         $testsBaseDir = $integrationTestsDir;
-        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper = AutoloaderRegistry::getAutoloader();
 
         $autoloadWrapper->addPsr4('Magento\\TestFramework\\', "{$testsBaseDir}/framework/Magento/TestFramework/");
         $autoloadWrapper->addPsr4('Magento\\', "{$testsBaseDir}/testsuite/Magento/");

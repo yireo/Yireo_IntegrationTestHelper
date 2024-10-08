@@ -21,27 +21,6 @@ class DisableModules
     }
 
     /**
-     * Setup the Magento application root
-     *
-     * @param string $applicationRoot
-     * @return void
-     */
-    private function setApplicationRoot(string $applicationRoot)
-    {
-        if (!is_dir($applicationRoot)) {
-            $msg = 'Application root "' . $applicationRoot . '" is not a directory';
-            throw new InvalidArgumentException($msg);
-        }
-
-        if (!is_file($applicationRoot . '/app/etc/config.php')) {
-            $msg = 'Application root "' . $applicationRoot . '" does not contain a Magento installation';
-            throw new InvalidArgumentException($msg);
-        }
-
-        $this->applicationRoot = $applicationRoot;
-    }
-
-    /**
      * Disable all available modules (as they are listed in the app/etc/config.php file
      *
      * @return $this
@@ -62,6 +41,11 @@ class DisableModules
         $this->disableModules = array_filter($this->disableModules, fn($module) => !preg_match('/^Magento_/', $module));
         $this->disableByPattern('SampleData');
         $this->disableByPattern('Magento_AdminAnalytics');
+
+        if ((int)$this->getVariable('DISABLE_INVENTORY') === 1) {
+            $this->disableMagentoInventory();
+        }
+
         return $this;
     }
 
@@ -72,11 +56,12 @@ class DisableModules
      */
     public function enableByMagentoModuleEnv(): DisableModules
     {
-        if (empty($_SERVER['MAGENTO_MODULE'])) {
+        $moduleName = $this->getVariable('MAGENTO_MODULE');
+        if (empty($moduleName)) {
             return $this;
         }
 
-        $this->enableByName($_SERVER['MAGENTO_MODULE']);
+        $this->enableByName($moduleName);
         return $this;
     }
 
@@ -165,7 +150,7 @@ class DisableModules
      */
     public function disableGraphQl(): DisableModules
     {
-        if (!empty($_SERVER['MAGENTO_GRAPHQL']) && (int)$_SERVER['MAGENTO_GRAPHQL'] === 1) {
+        if ((int)$this->getVariable('MAGENTO_GRAPHQL') === 1) {
             return $this;
         }
 
@@ -190,21 +175,6 @@ class DisableModules
     }
 
 
-    /**
-     * Include all modules that are disabled in the global configuration
-     *
-     * @return $this
-     */
-    private function disableDisabledAnyway(): DisableModules
-    {
-        foreach ($this->existingModules as $moduleName => $moduleStatus) {
-            if ($moduleStatus === 0) {
-                $this->disableModules[] = $moduleName;
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * Check if a given module is enabled in this DisableModules configuration
@@ -241,5 +211,58 @@ class DisableModules
     public function toString(): string
     {
         return implode(',', $this->get());
+    }
+
+    /**
+     * Setup the Magento application root
+     *
+     * @param string $applicationRoot
+     * @return void
+     */
+    private function setApplicationRoot(string $applicationRoot)
+    {
+        if (!is_dir($applicationRoot)) {
+            $msg = 'Application root "' . $applicationRoot . '" is not a directory';
+            throw new InvalidArgumentException($msg);
+        }
+
+        if (!is_file($applicationRoot . '/app/etc/config.php')) {
+            $msg = 'Application root "' . $applicationRoot . '" does not contain a Magento installation';
+            throw new InvalidArgumentException($msg);
+        }
+
+        $this->applicationRoot = $applicationRoot;
+    }
+    /**
+     * Include all modules that are disabled in the global configuration
+     *
+     * @return $this
+     */
+    private function disableDisabledAnyway(): DisableModules
+    {
+        foreach ($this->existingModules as $moduleName => $moduleStatus) {
+            if ($moduleStatus === 0) {
+                $this->disableModules[] = $moduleName;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $variableName
+     * @return mixed
+     */
+    private function getVariable(string $variableName): mixed
+    {
+        if (isset($_ENV[$variableName]) && !empty($_ENV[$variableName])) {
+            return $_ENV[$variableName];
+        }
+
+        if (isset($_SERVER[$variableName]) && !empty($_SERVER[$variableName])) {
+            return $_SERVER[$variableName];
+        }
+
+        return null;
     }
 }

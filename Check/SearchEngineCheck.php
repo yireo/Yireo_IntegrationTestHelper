@@ -21,16 +21,20 @@ class SearchEngineCheck
 
     public function checkSearchEngineConnection(): bool
     {
-       $config = $this->currentInstallConfig->getValues();
-       $hostKey = 'elasticsearch-host';
-       $portKey = 'elasticsearch-port';
-       if ($config['search-engine']) {
-           $hostKey = 'opensearch-host';
-           $portKey = 'opensearch-port';
-       }
+        $config = $this->currentInstallConfig->getValues();
+        $hostKey = 'elasticsearch-host';
+        $portKey = 'elasticsearch-port';
+        if (isset($config['search-engine']) && $config['search-engine'] === 'opensearch') {
+            $hostKey = 'opensearch-host';
+            $portKey = 'opensearch-port';
+        }
+
+        $configHostKey = $config[$hostKey] ?? 'localhost';
+        $configPortKey = $config[$portKey] ?? '9200';
 
         try {
-            $response = $this->httpClient->get($config[$hostKey].':'.$config[$portKey]);
+
+            $response = $this->httpClient->get($configHostKey.':'.$configPortKey);
         } catch (GuzzleException $e) {
             return false;
         }

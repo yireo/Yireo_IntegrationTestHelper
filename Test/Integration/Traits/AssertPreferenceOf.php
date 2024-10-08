@@ -2,8 +2,6 @@
 
 namespace Yireo\IntegrationTestHelper\Test\Integration\Traits;
 
-use Magento\TestFramework\ObjectManager;
-
 trait AssertPreferenceOf
 {
     use GetObjectManager;
