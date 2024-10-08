@@ -17,6 +17,7 @@ class GraphQlTestCase extends AbstractTestCase
      */
     protected function getGraphQlQueryData(string $query): array
     {
+        // @phpstan-ignore-next-line
         $graphQlRequest = $this->objectManager->get(GraphQlRequest::class);
         $response = $graphQlRequest->send($query);
         return json_decode($response->getContent(), true);

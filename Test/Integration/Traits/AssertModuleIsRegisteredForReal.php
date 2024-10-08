@@ -14,7 +14,11 @@ trait AssertModuleIsRegisteredForReal
 
     protected function assertModuleIsRegisteredForReal(string $moduleName)
     {
-        $directoryList = $this->om()->create(DirectoryList::class, ['root' => BP]); // @phpstan-ignore
+        if (!defined('BP')) {
+            define('BP', __DIR__);
+        }
+
+        $directoryList = $this->om()->create(DirectoryList::class, ['root' => BP]);
         $deploymentConfigReader = $this->om()->create(DeploymentConfigReader::class, ['dirList' => $directoryList]);
         $deploymentConfig = $this->om()->create(DeploymentConfig::class, ['reader' => $deploymentConfigReader]);
 
