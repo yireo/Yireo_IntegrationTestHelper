@@ -2,20 +2,21 @@
 
 namespace Yireo\IntegrationTestHelper\Check;
 
-use Laminas\Db\Adapter\Driver\Pdo\ConnectionFactory;
 use PDO;
+use PDOException;
+use Laminas\Db\Adapter\Driver\Pdo\ConnectionFactory;
 use Yireo\IntegrationTestHelper\Utilities\CurrentInstallConfig;
 
 class DbCheck
 {
     private CurrentInstallConfig $currentInstallConfig;
-    
+
     public function __construct(
         CurrentInstallConfig $currentInstallConfig
     ) {
         $this->currentInstallConfig = $currentInstallConfig;
     }
-    
+
     public function checkDbConnection(): bool
     {
         $config = $this->currentInstallConfig->getValues();
