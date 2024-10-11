@@ -91,12 +91,21 @@ return (new InstallConfig())
     ->get();
 ```
 
-Instead of using a hard-coded value, you might also want to set an environment variable `MAGENTO_MODULE` - for instance, in the **Run** configuration in PHPStorm - which is then reused via the method `enableByMagentoModuleEnv`. This way, you can keep the same `install-config-mysql.php` file while reusing it for various **Run** configurations:
+Instead of using a hard-coded value, you might also want to set an environment variable `MAGENTO_MODULE` - for instance, in the **Run** configuration in PHPStorm. This way, you can keep the same `install-config-mysql.php` file while reusing it for various **Run** configurations:
 
 ```php
-$disableModules->disableAll()
-    ->enableMagento()
-    ->enableByMagentoModuleEnv();
+MAGENTO_MODULE=Yireo_Example
+```
+
+Note that if your module has dependencies, they need to be added to the same environment as well:
+
+```php
+MAGENTO_MODULE=Yireo_Example,Yireo_Foobar
+```
+
+If you have a lot of requirements, you can also use the `MAGENTO_MODULE_FOLDER` variable instead, which parses your own `etc/module.xml` and adds all declared modules to the whitelist:
+```php
+MAGENTO_MODULE_FOLDER=app/code/Yireo/Example
 ```
 
 Another example, all the Magento modules are enabled by default. But then MSI and GraphQL are disabled again, while all Yireo modules are enabled:

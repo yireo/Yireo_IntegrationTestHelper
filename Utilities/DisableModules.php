@@ -67,6 +67,40 @@ class DisableModules
     }
 
     /**
+     * Enable a specific module by looking up the environment variable MAGENTO_MODULE
+     *
+     * @return $this
+     */
+    public function enableByMagentoModuleFolderEnv(): DisableModules
+    {
+        $moduleFolder = $this->getVariable('MAGENTO_MODULE_FOLDER');
+        if (empty($moduleFolder)) {
+            return $this;
+        }
+
+        $fullModuleFolder = $this->applicationRoot.'/'.$moduleFolder;
+        if (false === is_dir($fullModuleFolder)) {
+            return $this;
+        }
+
+        if (false === is_file($fullModuleFolder.'/etc/module.xml')) {
+            return $this;
+        }
+
+        $moduleXml = file_get_contents($fullModuleFolder.'/etc/module.xml');
+        $xml = simplexml_load_string($moduleXml, "SimpleXMLElement");
+        $this->enableByName((string)$xml->module['name']);
+
+        if ($xml->module->sequence) {
+            foreach ($xml->module->sequence->module as $sequence) {
+                $this->enableByName((string)$sequence['name']);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Enable a specific module by its name (like "Foo_Bar")
      *
      * @return $this
@@ -159,6 +193,22 @@ class DisableModules
     }
 
     /**
+     * Include all modules that are disabled in the global configuration
+     *
+     * @return $this
+     */
+    public function disableDisabledAnyway(): DisableModules
+    {
+        foreach ($this->existingModules as $moduleName => $moduleStatus) {
+            if ($moduleStatus === 0) {
+                $this->disableModules[] = $moduleName;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Get all modules from the configuration
      *
      * @return array
@@ -174,8 +224,6 @@ class DisableModules
         $config = require($configFile);
         return $config['modules'];
     }
-
-
 
     /**
      * Check if a given module is enabled in this DisableModules configuration
@@ -199,7 +247,8 @@ class DisableModules
      */
     public function get(): array
     {
-        $this->disableDisabledAnyway();
+        $this->enableByMagentoModuleEnv();
+        $this->enableByMagentoModuleFolderEnv();
         sort($this->disableModules);
         return array_unique($this->disableModules);
     }
@@ -234,21 +283,7 @@ class DisableModules
 
         $this->applicationRoot = $applicationRoot;
     }
-    /**
-     * Include all modules that are disabled in the global configuration
-     *
-     * @return $this
-     */
-    private function disableDisabledAnyway(): DisableModules
-    {
-        foreach ($this->existingModules as $moduleName => $moduleStatus) {
-            if ($moduleStatus === 0) {
-                $this->disableModules[] = $moduleName;
-            }
-        }
 
-        return $this;
-    }
 
     /**
      * @param string $variableName
