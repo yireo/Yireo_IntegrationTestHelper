@@ -12,6 +12,10 @@ trait AssertModuleIsRegistered
     protected function assertModuleIsRegistered(string $moduleName)
     {
         $registrar = $this->om()->create(ComponentRegistrar::class);
-        $this->assertArrayHasKey($moduleName, $registrar->getPaths(ComponentRegistrar::MODULE));
+        $this->assertArrayHasKey(
+            $moduleName,
+            $registrar->getPaths(ComponentRegistrar::MODULE),
+            'Module ' . $moduleName . ' is not registered.'
+        );
     }
 }

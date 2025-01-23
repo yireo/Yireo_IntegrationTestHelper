@@ -78,16 +78,19 @@ class DisableModules
             return $this;
         }
 
-        $fullModuleFolder = $this->applicationRoot.'/'.$moduleFolder;
-        if (false === is_dir($fullModuleFolder)) {
+        if (!preg_match('/^\//', $moduleFolder)) {
+            $moduleFolder = realpath($this->applicationRoot.'/'.$moduleFolder);
+        }
+
+        if (false === is_dir($moduleFolder)) {
             return $this;
         }
 
-        if (false === is_file($fullModuleFolder.'/etc/module.xml')) {
+        if (false === is_file($moduleFolder.'/etc/module.xml')) {
             return $this;
         }
 
-        $moduleXml = file_get_contents($fullModuleFolder.'/etc/module.xml');
+        $moduleXml = file_get_contents($moduleFolder.'/etc/module.xml');
         $xml = simplexml_load_string($moduleXml, "SimpleXMLElement");
         $this->enableByName((string)$xml->module['name']);
 

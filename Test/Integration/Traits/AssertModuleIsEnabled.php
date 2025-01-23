@@ -12,9 +12,12 @@ trait AssertModuleIsEnabled
     protected function assertModuleIsEnabled(string $moduleName)
     {
         $moduleList = $this->om()->create(ModuleList::class);
+        $modulesOutput = implode(', ', $moduleList->getNames());
+
         $this->assertTrue(
             $moduleList->has($moduleName),
-            'The module "' . $moduleName . '" is not enabled'
+            'The module "' . $moduleName . '" is not enabled',
+            $modulesOutput
         );
     }
 }
