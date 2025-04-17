@@ -78,8 +78,8 @@ class DisableModules
             return $this;
         }
 
-        if (!preg_match('/^\//', $moduleFolder)) {
-            $moduleFolder = realpath($this->applicationRoot.'/'.$moduleFolder);
+        if (false === is_dir($moduleFolder)) {
+            $moduleFolder = $this->applicationRoot.'/'.$moduleFolder;
         }
 
         if (false === is_dir($moduleFolder)) {
@@ -279,7 +279,7 @@ class DisableModules
             throw new InvalidArgumentException($msg);
         }
 
-        if (!is_file($applicationRoot . '/app/etc/config.php')) {
+        if (!is_file($applicationRoot . '/app/etc/di.xml')) {
             $msg = 'Application root "' . $applicationRoot . '" does not contain a Magento installation';
             throw new InvalidArgumentException($msg);
         }

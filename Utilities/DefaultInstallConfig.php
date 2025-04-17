@@ -21,11 +21,11 @@ class DefaultInstallConfig
             'elasticsearch-host' => 'localhost',
             'elasticsearch-port' => '9200',
             'backend-frontname' => 'backend',
-            'admin-user' => Bootstrap::ADMIN_NAME,
-            'admin-password' => Bootstrap::ADMIN_PASSWORD,
-            'admin-email' => Bootstrap::ADMIN_EMAIL,
-            'admin-firstname' => Bootstrap::ADMIN_FIRSTNAME,
-            'admin-lastname' => Bootstrap::ADMIN_LASTNAME,
+            'admin-user' => Bootstrap::ADMIN_NAME, // @phpstan-ignore-line
+            'admin-password' => Bootstrap::ADMIN_PASSWORD, // @phpstan-ignore-line
+            'admin-email' => Bootstrap::ADMIN_EMAIL, // @phpstan-ignore-line
+            'admin-firstname' => Bootstrap::ADMIN_FIRSTNAME, // @phpstan-ignore-line
+            'admin-lastname' => Bootstrap::ADMIN_LASTNAME, // @phpstan-ignore-line
             'allow-parallel-generation' => null,
             'skip-db-validation' => null
         ];
