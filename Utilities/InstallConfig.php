@@ -92,12 +92,12 @@ class InstallConfig
         $this->installConfig['page-cache'] = 'redis';
         $this->installConfig['page-cache-redis-server'] = $serverName;
         $this->installConfig['page-cache-redis-port'] = $serverPort;
-        $this->installConfig['page-cache-redis-db'] = $redisDb;
+        $this->installConfig['page-cache-redis-db'] = $redisDb + 1;
 
         $this->installConfig['session-save'] = 'redis';
         $this->installConfig['session-save-redis-host'] = $serverName;
         $this->installConfig['session-save-redis-port'] = $serverPort;
-        $this->installConfig['session-save-redis-db'] = $redisDb;
+        $this->installConfig['session-save-redis-db'] = $redisDb + 2;
         $this->installConfig['session-save-redis-max-concurrency'] = 20;
 
         $this->installConfig['allow-parallel-generation'] = null;
