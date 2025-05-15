@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yireo\IntegrationTestHelper\Utilities;
 
 use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class DisableModules
 {
@@ -92,7 +94,8 @@ class DisableModules
 
         $moduleXml = file_get_contents($moduleFolder.'/etc/module.xml');
         $xml = simplexml_load_string($moduleXml, "SimpleXMLElement");
-        $this->enableByName((string)$xml->module['name']);
+        $moduleName = (string)$xml->module['name'];
+        $this->enableByName($moduleName);
 
         if ($xml->module->sequence) {
             foreach ($xml->module->sequence->module as $sequence) {
@@ -111,7 +114,16 @@ class DisableModules
     public function enableByName(string $moduleName): DisableModules
     {
         $moduleNames = explode(',', $moduleName);
+        foreach ($moduleNames as $moduleName) {
+            $componentRegistrar = ObjectManager::getInstance()->get(ComponentRegistrar::class);
+            $path = $componentRegistrar->getPath('module', $moduleName);
+            file_put_contents(__DIR__ . '/tmp.log', $moduleName." - $path\n", FILE_APPEND);
+        }
+
         $this->disableModules = array_filter($this->disableModules, fn($module) => !in_array($module, $moduleNames));
+
+        // @todo: For each module to add, check its etc/module.xml file
+
         return $this;
     }
 
