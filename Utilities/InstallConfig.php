@@ -32,7 +32,7 @@ class InstallConfig
      * @param string $dbPassword
      * @param string $dbName
      * @param string $dbPrefix
-     * @return void
+     * @return InstallConfig
      */
     public function addDb(
         string $dbHost = 'localhost',
@@ -54,10 +54,10 @@ class InstallConfig
      * @param string $searchEngine
      * @param string $serverName
      * @param string $serverPort
-     * @return void
+     * @return InstallConfig
      */
-    public function addElasticSearch(
-        string $searchEngine = 'elasticsearch7',
+    public function addSearchEngine(
+        string $searchEngine = 'opensearch',
         string $serverName = 'localhost',
         string $serverPort = '9200'
     ): InstallConfig {
@@ -74,10 +74,25 @@ class InstallConfig
     }
 
     /**
+     * @param string $searchEngine
+     * @param string $serverName
+     * @param string $serverPort
+     * @return InstallConfig
+     * @deprecated Use addSearchEngine() instead
+     */
+    public function addElasticSearch(
+        string $searchEngine = 'elasticsearch7',
+        string $serverName = 'localhost',
+        string $serverPort = '9200'
+    ): InstallConfig {
+        return $this->addSearchEngine($searchEngine, $serverName, $serverPort);
+    }
+
+    /**
      * @param string $serverName
      * @param string $serverPort
      * @param int $redisDb
-     * @return void
+     * @return InstallConfig
      */
     public function addRedis(
         string $serverName = '127.0.0.1',
