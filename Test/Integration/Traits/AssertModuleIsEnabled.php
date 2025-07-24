@@ -16,8 +16,7 @@ trait AssertModuleIsEnabled
 
         $this->assertTrue(
             $moduleList->has($moduleName),
-            'The module "' . $moduleName . '" is not enabled',
-            $modulesOutput
+            'The module "' . $moduleName . '" is not enabled: ' . $modulesOutput
         );
     }
 }
