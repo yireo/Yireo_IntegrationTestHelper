@@ -1,0 +1,5 @@
+{
+  "ignore": [
+    "colinmollenhour/cache-backend-redis"
+  ]
+}
