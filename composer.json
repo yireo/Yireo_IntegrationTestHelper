@@ -6,6 +6,7 @@
     "homepage": "https://www.yireo.com/software/magento-extensions/",
     "description": "Magento 2 module to support integration tests in other modules",
     "keywords": [
+        "dev",
         "magento",
         "Magento 2",
         "Yireo"
