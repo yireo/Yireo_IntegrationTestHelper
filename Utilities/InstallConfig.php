@@ -59,7 +59,7 @@ class InstallConfig
     public function addSearchEngine(
         string $searchEngine = 'opensearch',
         string $serverName = 'localhost',
-        string $serverPort = '9200'
+        int|string $serverPort = '9200'
     ): InstallConfig {
         $this->installConfig['search-engine'] = $searchEngine;
         if ($searchEngine === 'opensearch') {
@@ -83,7 +83,7 @@ class InstallConfig
     public function addElasticSearch(
         string $searchEngine = 'elasticsearch7',
         string $serverName = 'localhost',
-        string $serverPort = '9200'
+        int|string $serverPort = '9200'
     ): InstallConfig {
         return $this->addSearchEngine($searchEngine, $serverName, $serverPort);
     }
