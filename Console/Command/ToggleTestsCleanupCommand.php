@@ -32,7 +32,7 @@ class ToggleTestsCleanupCommand extends Command
      */
     public function __construct(
         Constant $phpUnitConstant,
-        $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
         $this->phpUnitConstant = $phpUnitConstant;

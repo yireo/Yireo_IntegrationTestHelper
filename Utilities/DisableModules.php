@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yireo\IntegrationTestHelper\Utilities;
 
 use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class DisableModules
 {
@@ -90,17 +92,29 @@ class DisableModules
             return $this;
         }
 
-        $moduleXml = file_get_contents($moduleFolder.'/etc/module.xml');
-        $xml = simplexml_load_string($moduleXml, "SimpleXMLElement");
-        $this->enableByName((string)$xml->module['name']);
-
-        if ($xml->module->sequence) {
-            foreach ($xml->module->sequence->module as $sequence) {
-                $this->enableByName((string)$sequence['name']);
-            }
+        $moduleXmlFile = $moduleFolder.'/etc/module.xml';
+        foreach ($this->getModuleNamesFromModuleXml($moduleXmlFile) as $moduleName) {
+            $this->enableByName($moduleName);
         }
 
         return $this;
+    }
+
+    private function getModuleNamesFromModuleXml(string $moduleXmlFile): array
+    {
+        $moduleNames = [];
+        $moduleXml = file_get_contents($moduleXmlFile);
+        $xml = simplexml_load_string($moduleXml, "SimpleXMLElement");
+        $moduleName = (string)$xml->module['name'];
+        $moduleNames[] = $moduleName;
+
+        if ($xml->module->sequence) {
+            foreach ($xml->module->sequence->module as $sequence) {
+                $moduleNames[] = (string)$sequence['name'];
+            }
+        }
+
+        return $moduleNames;
     }
 
     /**
@@ -111,8 +125,30 @@ class DisableModules
     public function enableByName(string $moduleName): DisableModules
     {
         $moduleNames = explode(',', $moduleName);
+        $moduleMap = $this->getModuleMap();
+        foreach ($moduleNames as $moduleName) {
+            if (!isset($moduleMap[$moduleName])) {
+                continue;
+            }
+
+            $modulePath = $moduleMap[$moduleName];
+            $moduleXmlFile = $modulePath.'/etc/module.xml';
+            $moduleNames = array_merge($moduleNames, $this->getModuleNamesFromModuleXml($moduleXmlFile));
+        }
+
         $this->disableModules = array_filter($this->disableModules, fn($module) => !in_array($module, $moduleNames));
+
         return $this;
+    }
+
+    private function getModuleMap(): array
+    {
+        $moduleMapFile = $this->applicationRoot.'/dev/tests/integration/module-map.json';
+        if (!file_exists($moduleMapFile)) {
+            return [];
+        }
+
+        return json_decode(file_get_contents($moduleMapFile), true);
     }
 
     /**

@@ -32,7 +32,7 @@ class InstallConfig
      * @param string $dbPassword
      * @param string $dbName
      * @param string $dbPrefix
-     * @return void
+     * @return InstallConfig
      */
     public function addDb(
         string $dbHost = 'localhost',
@@ -54,12 +54,12 @@ class InstallConfig
      * @param string $searchEngine
      * @param string $serverName
      * @param string $serverPort
-     * @return void
+     * @return InstallConfig
      */
-    public function addElasticSearch(
-        string $searchEngine = 'elasticsearch7',
+    public function addSearchEngine(
+        string $searchEngine = 'opensearch',
         string $serverName = 'localhost',
-        string $serverPort = '9200'
+        int|string $serverPort = '9200'
     ): InstallConfig {
         $this->installConfig['search-engine'] = $searchEngine;
         if ($searchEngine === 'opensearch') {
@@ -74,10 +74,25 @@ class InstallConfig
     }
 
     /**
+     * @param string $searchEngine
+     * @param string $serverName
+     * @param string $serverPort
+     * @return InstallConfig
+     * @deprecated Use addSearchEngine() instead
+     */
+    public function addElasticSearch(
+        string $searchEngine = 'elasticsearch7',
+        string $serverName = 'localhost',
+        int|string $serverPort = '9200'
+    ): InstallConfig {
+        return $this->addSearchEngine($searchEngine, $serverName, $serverPort);
+    }
+
+    /**
      * @param string $serverName
      * @param string $serverPort
      * @param int $redisDb
-     * @return void
+     * @return InstallConfig
      */
     public function addRedis(
         string $serverName = '127.0.0.1',
@@ -92,12 +107,12 @@ class InstallConfig
         $this->installConfig['page-cache'] = 'redis';
         $this->installConfig['page-cache-redis-server'] = $serverName;
         $this->installConfig['page-cache-redis-port'] = $serverPort;
-        $this->installConfig['page-cache-redis-db'] = $redisDb;
+        $this->installConfig['page-cache-redis-db'] = $redisDb + 1;
 
         $this->installConfig['session-save'] = 'redis';
         $this->installConfig['session-save-redis-host'] = $serverName;
         $this->installConfig['session-save-redis-port'] = $serverPort;
-        $this->installConfig['session-save-redis-db'] = $redisDb;
+        $this->installConfig['session-save-redis-db'] = $redisDb + 2;
         $this->installConfig['session-save-redis-max-concurrency'] = 20;
 
         $this->installConfig['allow-parallel-generation'] = null;

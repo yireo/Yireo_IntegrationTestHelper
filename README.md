@@ -143,3 +143,26 @@ $ bin/magento integration_tests:check
 | Redis reachable    | Yes                |
 +--------------------+--------------------+
 ```
+
+## FAQ
+
+### Do I need ElasticSearch / OpenSearch for integration tests?
+Yes, by default. No, with a little bit of work. You could just disable all Elasticsearch and Opensearch modules at installation time (see code sample below), but then Magento will still try to detect a valid search engine during the setup. This could be hacked with a modified `setup/src/Magento/Setup/Model/SearchConfig.php` file, but it's not perfect.
+
+```php
+$disableModules = (new DisableModules(__DIR__.'/../../../../'))
+    ->disableByPattern('Elasticsearch')
+    ->disableByPattern('Opensearch')
+    ...
+```
+
+Another option might be to configure a Docker-based dummy service that responds with a HTTP status 200 while listening to port 9200. The following is an example `docker-compose` entry for this:
+```yaml
+  elasticsearch-dummy:
+      command: php -S 0.0.0.0:9200
+      ports:
+        - 9200
+```
+
+### When using the `DisableModules` approach, all tests fail
+The `DisableModules` class tries to determine which modules are known to Magento by reading from the regular `app/etc/config.php` file. If this file is outdated, because modules have been installed but not yet registered to this file, then these modules will be enabled by default through the `DisableModules` class approach. If you don't want this to happen, first run `setup:upgrade` in the regular environment and then run the tests again. Or explicitly disable the new modules as well.

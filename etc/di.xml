@@ -5,9 +5,8 @@
             <argument name="commands" xsi:type="array">
                 <item name="Yireo_IntegrationTestHelper::toggleTestsCleanup" xsi:type="object">Yireo\IntegrationTestHelper\Console\Command\ToggleTestsCleanupCommand</item>
                 <item name="Yireo_IntegrationTestHelper::check" xsi:type="object">Yireo\IntegrationTestHelper\Console\Command\CheckCommand</item>
+                <item name="Yireo_IntegrationTestHelper::generateModuleMapping" xsi:type="object">Yireo\IntegrationTestHelper\Console\Command\GenerateModuleMappingCommand</item>
             </argument>
         </arguments>
     </type>
-
-    <preference for="Laminas\ServiceManager\ServiceLocatorInterface" type="Laminas\ServiceManager\ServiceManager"/>
 </config>

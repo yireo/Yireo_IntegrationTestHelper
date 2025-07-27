@@ -37,7 +37,7 @@ class CheckCommand extends Command
         DbCheck $dbCheck,
         SearchEngineCheck $searchEngineCheck,
         RedisCheck $redisCheck,
-        string $name = null
+        ?string $name = null
     ) {
         parent::__construct($name);
         $this->constant = $constant;
