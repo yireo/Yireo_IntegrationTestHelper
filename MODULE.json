@@ -1,0 +1,11 @@
+{
+    "sequence": [],
+    "modules": [],
+    "components": [],
+    "config": [],
+    "tests": {
+        "unit": 0,
+        "integration": 3,
+        "functional": 0
+    }
+}
