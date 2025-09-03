@@ -97,6 +97,15 @@ class DisableModules
             $this->enableByName($moduleName);
         }
 
+        if (is_file($moduleFolder.'/MODULE.json')) {
+            $data = json_decode(file_get_contents($moduleFolder.'/MODULE.json'), true);
+            if (isset($data['modules']) && is_array($data['modules'])) {
+                foreach ($data['modules'] as $module) {
+                    $this->enableByName($module);
+                }
+            }
+        }
+
         return $this;
     }
 
