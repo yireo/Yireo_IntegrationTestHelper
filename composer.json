@@ -19,18 +19,18 @@
     ],
     "require": {
         "magento/framework": "^101.0.1|^101.1|^102.0|^103.0",
-        "symfony/finder": "^4.0 || ^5.0 || ^6.0",
-        "php": "8.0.* || 8.1.* || 8.2.* || 8.3.* || 8.4.*"
+        "php": "8.0.* || 8.1.* || 8.2.* || 8.3.* || 8.4.*",
+        "symfony/finder": "^4.0 || ^5.0 || ^6.0"
     },
     "require-dev": {
         "colinmollenhour/cache-backend-redis": "^1.17",
+        "ext-json": "*",
+        "ext-pcre": "*",
         "guzzlehttp/guzzle": "^7.9",
         "magento/framework": "^103.0",
         "magento/zend-cache": "^1.16",
-        "symfony/console": "~v6.4.23",
         "php": "^8.0",
-        "ext-json": "*",
-        "ext-pcre": "*"
+        "symfony/console": "~v6.4.23"
     },
     "autoload": {
         "psr-4": {
