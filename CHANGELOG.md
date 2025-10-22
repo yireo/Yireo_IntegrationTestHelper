@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.21] - 22 October 2025
+### Fixed
+- Add PHP 8.4 compat
+
 ## [0.0.20] - 03 September 2025
 ### Fixed
 - Add support for custom MODULE.json file
