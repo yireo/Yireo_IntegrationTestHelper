@@ -29,7 +29,6 @@
         "guzzlehttp/guzzle": "^7.9",
         "magento/framework": "^103.0",
         "magento/zend-cache": "^1.16",
-        "php": "^8.0",
         "symfony/console": "~v6.4.23"
     },
     "autoload": {
