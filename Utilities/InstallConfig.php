@@ -116,6 +116,7 @@ class InstallConfig
         $this->installConfig['session-save-redis-max-concurrency'] = 20;
 
         $this->installConfig['allow-parallel-generation'] = null;
+
         return $this;
     }
 
