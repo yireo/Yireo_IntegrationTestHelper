@@ -9,14 +9,18 @@ trait AssertModuleIsEnabled
 {
     use GetObjectManager;
 
-    protected function assertModuleIsEnabled(string $moduleName)
+    protected function assertModuleIsEnabled(string $moduleName, bool $debug = false)
     {
         $moduleList = $this->om()->create(ModuleList::class);
-        $modulesOutput = implode(', ', $moduleList->getNames());
+
+        $debugMsg = '.';
+        if ($debug) {
+            $debugMsg = ': '.implode(', ', $moduleList->getNames());
+        }
 
         $this->assertTrue(
             $moduleList->has($moduleName),
-            'The module "' . $moduleName . '" is not enabled: ' . $modulesOutput
+            'The module "' . $moduleName . '" is not enabled' . $debugMsg
         );
     }
 }
