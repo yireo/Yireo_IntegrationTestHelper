@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.22] - 13 June 2026
+### Fixed
+- Add Symfony 7 compat
+- Add debugging flag to `assertModuleIs*` calls
+
 ## [0.0.21] - 22 October 2025
 ### Fixed
 - Add PHP 8.4 compat
