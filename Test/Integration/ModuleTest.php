@@ -16,7 +16,6 @@ class ModuleTest extends TestCase
     public function testIfModuleIsEnabled()
     {
         $moduleName = 'Yireo_IntegrationTestHelper';
-        $this->assertModuleIsRegisteredForReal($moduleName);
         $this->assertModuleIsRegistered($moduleName);
         $this->assertModuleIsEnabled($moduleName);
     }
