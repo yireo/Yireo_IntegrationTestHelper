@@ -41,7 +41,7 @@ class ToggleTestsCleanupCommand extends Command
     /**
      * Configure this Symfony command
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('integration_tests:toggle_tests_cleanup')
             ->setDescription('Toggle the variable TESTS_CLEANUP in dev/tests/integration/phpunit.xml')

@@ -50,7 +50,7 @@ class CheckCommand extends Command
     /**
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('integration_tests:check')
             ->setDescription('Perform a simple check before running integration tests');

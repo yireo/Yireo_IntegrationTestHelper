@@ -30,7 +30,7 @@ class GenerateModuleMappingCommand extends Command
     /**
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('integration_tests:generate-module-mapping')
             ->setDescription('Generate dev/tests/integration/module-map.json');
