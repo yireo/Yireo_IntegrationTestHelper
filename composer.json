@@ -22,9 +22,9 @@
         "php": "8.0.*||8.1.*||8.2.*||8.3.*||8.4.*"
     },
     "require-dev": {
+        "colinmollenhour/cache-backend-redis": "^1.17",
         "ext-json": "*",
         "ext-pcre": "*",
-        "colinmollenhour/cache-backend-redis": "^1.17",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "magento/zend-cache": "^1.16",
         "symfony/console": "^5.0|^6.0|^7.0"
