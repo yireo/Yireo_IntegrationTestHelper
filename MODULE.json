@@ -19,5 +19,5 @@
     "skip_magento_versions": [],
     "skip_css_utils": false,
     "phpcs_severity": "9",
-    "phpstan_level": 1
+    "phpstan_level": "1"
 }
