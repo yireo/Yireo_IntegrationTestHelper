@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.23] - 13 June 2026
+### Fixed
+- Bump constraints
+- Remove AssertModuleIsRegisteredForReal usage
+
 ## [0.0.22] - 13 June 2026
 ### Fixed
 - Add Symfony 7 compat

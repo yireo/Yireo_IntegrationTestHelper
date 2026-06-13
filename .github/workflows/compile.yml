@@ -55,5 +55,5 @@ jobs:
         run: |
           cd /tmp/magento
           bin/magento module:enable --all
-          php -dmemory_limit=-1 bin/magento setup:di:compile
+          php -dzend.enable_gc=0 -drealpath_cache_size=64M -drealpath_cache_ttl=7200 -dopcache.enable_cli=1 -dopcache.memory_consumption=512 -dopcache.interned_strings_buffer=64 -dopcache.max_accelerated_files=100000 -dmemory_limit=-1 bin/magento setup:di:compile
 
