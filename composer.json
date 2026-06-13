@@ -1,10 +1,10 @@
 {
     "name": "yireo/magento2-integration-test-helper",
-    "license": "OSL-3.0",
-    "version": "0.0.22",
+    "description": "Magento 2 module to support integration tests in other modules",
     "type": "magento2-module",
     "homepage": "https://www.yireo.com/software/magento-extensions/",
-    "description": "Magento 2 module to support integration tests in other modules",
+    "license": "OSL-3.0",
+    "version": "0.0.22",
     "keywords": [
         "dev",
         "magento",
@@ -19,15 +19,15 @@
     ],
     "require": {
         "magento/framework": "^101.0.1|^101.1|^102.0|^103.0",
-        "php": "8.0.* || 8.1.* || 8.2.* || 8.3.* || 8.4.*"
+        "php": "8.0.*||8.1.*||8.2.*||8.3.*||8.4.*"
     },
     "require-dev": {
-        "colinmollenhour/cache-backend-redis": "^1.17",
         "ext-json": "*",
         "ext-pcre": "*",
-        "guzzlehttp/guzzle": "^7.9",
+        "colinmollenhour/cache-backend-redis": "^1.17",
+        "guzzlehttp/guzzle": "^6.0|^7.0",
         "magento/zend-cache": "^1.16",
-        "symfony/console": "~v6.4.23"
+        "symfony/console": "^5.0|^6.0|^7.0"
     },
     "autoload": {
         "psr-4": {
