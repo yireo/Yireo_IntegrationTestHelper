@@ -11,7 +11,6 @@
     "module_name": "Yireo_IntegrationTestHelper",
     "composer_name": "yireo/magento2-integration-test-helper",
     "php_versions": [
-        "8.1",
         "8.2",
         "8.3",
         "8.4",

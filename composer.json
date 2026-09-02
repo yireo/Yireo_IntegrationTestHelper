@@ -19,7 +19,7 @@
     ],
     "require": {
         "magento/framework": "^101.0.1|^101.1|^102.0|^103.0",
-        "php": "8.0.*|8.1.*|8.2.*|8.3.*|8.4.*|8.5.*"
+        "php": ">=8.2 <8.6"
     },
     "require-dev": {
         "colinmollenhour/cache-backend-redis": "^1.17",
