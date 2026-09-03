@@ -1,4 +1,12 @@
 # Magento 2 integration testing helper
+
+<!-- badges.specs.start -->
+![Magento version](https://img.shields.io/badge/Magento-2.4.6%20%7C%202.4.9-orange)
+![PHP version](https://img.shields.io/badge/PHP-8.2%E2%80%938.5-777BB4)
+![License](https://img.shields.io/badge/License-OSL--3.0-blue)
+![Latest Version](https://img.shields.io/packagist/v/yireo/magento2-integration-test-helper)
+<!-- badges.specs.end -->
+
 This module adds various utilities to aid in creating integration tests for Magento 2.
 
 ## Installation
@@ -166,3 +174,13 @@ Another option might be to configure a Docker-based dummy service that responds 
 
 ### When using the `DisableModules` approach, all tests fail
 The `DisableModules` class tries to determine which modules are known to Magento by reading from the regular `app/etc/config.php` file. If this file is outdated, because modules have been installed but not yet registered to this file, then these modules will be enabled by default through the `DisableModules` class approach. If you don't want this to happen, first run `setup:upgrade` in the regular environment and then run the tests again. Or explicitly disable the new modules as well.
+
+## Current status
+
+<!-- badges.test.start -->
+![Static Tests](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_IntegrationTestHelper/static-tests.yml?label=static-tests)
+![Unit Tests](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_IntegrationTestHelper/unit-tests.yml?label=unit-tests)
+![Integration Tests](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_IntegrationTestHelper/integration-tests.yml?label=integration-tests)
+![Playwright](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_IntegrationTestHelper/playwright.yml?label=playwright)
+![DI Compilation](https://img.shields.io/github/actions/workflow/status/yireo/Yireo_IntegrationTestHelper/compile.yml?label=compile)
+<!-- badges.test.end -->
