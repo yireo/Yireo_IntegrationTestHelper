@@ -118,7 +118,7 @@ class PhpUnitFile
             return $file;
         }
 
-        throw new FileNotFound(__(sprintf('%s not found', $file)));
+        throw new FileNotFound((string)__(sprintf('%s not found', $file)));
     }
 
     /**
