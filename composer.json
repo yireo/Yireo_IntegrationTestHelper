@@ -27,7 +27,7 @@
         "ext-pcre": "*",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "magento/zend-cache": "^1.16",
-        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0",
+        "phpunit/phpunit": "^10.5|^11.0|^12.0",
         "symfony/console": "^5.0|^6.0|^7.0"
     },
     "autoload": {
