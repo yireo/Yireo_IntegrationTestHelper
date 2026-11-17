@@ -93,16 +93,12 @@ class DisableModules
         }
 
         $moduleXmlFile = $moduleFolder.'/etc/module.xml';
-        foreach ($this->getModuleNamesFromModuleXml($moduleXmlFile) as $moduleName) {
-            $this->enableByName($moduleName);
-        }
+        $this->enableByName(implode(',', $this->getModuleNamesFromModuleXml($moduleXmlFile)));
 
         if (is_file($moduleFolder.'/MODULE.json')) {
             $data = json_decode(file_get_contents($moduleFolder.'/MODULE.json'), true);
             if (isset($data['modules']) && is_array($data['modules'])) {
-                foreach ($data['modules'] as $module) {
-                    $this->enableByName($module);
-                }
+                $this->enableByName(implode(',', $data['modules']));
             }
         }
 
@@ -112,8 +108,16 @@ class DisableModules
     private function getModuleNamesFromModuleXml(string $moduleXmlFile): array
     {
         $moduleNames = [];
+        if (false === is_file($moduleXmlFile)) {
+            return $moduleNames;
+        }
+
         $moduleXml = file_get_contents($moduleXmlFile);
         $xml = simplexml_load_string($moduleXml, "SimpleXMLElement");
+        if (false === $xml || !isset($xml->module)) {
+            return $moduleNames;
+        }
+
         $moduleName = (string)$xml->module['name'];
         $moduleNames[] = $moduleName;
 
@@ -133,31 +137,52 @@ class DisableModules
      */
     public function enableByName(string $moduleName): DisableModules
     {
-        $moduleNames = explode(',', $moduleName);
-        $moduleMap = $this->getModuleMap();
-        foreach ($moduleNames as $moduleName) {
-            if (!isset($moduleMap[$moduleName])) {
-                continue;
-            }
-
-            $modulePath = $moduleMap[$moduleName];
-            $moduleXmlFile = $modulePath.'/etc/module.xml';
-            $moduleNames = array_merge($moduleNames, $this->getModuleNamesFromModuleXml($moduleXmlFile));
-        }
-
+        $moduleNames = $this->resolveDependencies(array_filter(array_map('trim', explode(',', $moduleName))));
         $this->disableModules = array_filter($this->disableModules, fn($module) => !in_array($module, $moduleNames));
 
         return $this;
     }
 
-    private function getModuleMap(): array
+    private function resolveDependencies(array $moduleNames): array
     {
-        $moduleMapFile = $this->applicationRoot.'/dev/tests/integration/module-map.json';
-        if (!file_exists($moduleMapFile)) {
-            return [];
+        $moduleMap = $this->getModuleMap();
+        $resolved = [];
+        $queue = array_values($moduleNames);
+        while (!empty($queue)) {
+            $moduleName = array_shift($queue);
+            if (isset($resolved[$moduleName])) {
+                continue;
+            }
+
+            $resolved[$moduleName] = true;
+            if (!isset($moduleMap[$moduleName])) {
+                continue;
+            }
+
+            $moduleXmlFile = $moduleMap[$moduleName].'/etc/module.xml';
+            foreach ($this->getModuleNamesFromModuleXml($moduleXmlFile) as $dependency) {
+                if (!isset($resolved[$dependency])) {
+                    $queue[] = $dependency;
+                }
+            }
         }
 
-        return json_decode(file_get_contents($moduleMapFile), true);
+        return array_keys($resolved);
+    }
+
+    private function getModuleMap(): array
+    {
+        $moduleMap = [];
+        if (class_exists(ComponentRegistrar::class)) {
+            $moduleMap = (new ComponentRegistrar())->getPaths(ComponentRegistrar::MODULE);
+        }
+
+        $moduleMapFile = $this->applicationRoot.'/dev/tests/integration/module-map.json';
+        if (file_exists($moduleMapFile)) {
+            $moduleMap = array_merge((array)json_decode(file_get_contents($moduleMapFile), true), $moduleMap);
+        }
+
+        return $moduleMap;
     }
 
     /**
