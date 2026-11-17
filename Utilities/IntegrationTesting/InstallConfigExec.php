@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 // phpcs:ignoreFile
 
-$magentoRoot = $argv[1];
+$magentoRoot = $_SERVER['argv'][1] ?? '';
 
 require_once $magentoRoot . '/dev/tests/integration/framework/autoload.php';
 
