@@ -1,3 +1,9 @@
 .playwright/
 .opencode/
 .yireo-extension-builder.json
+.php-cs-fixer.cache
+.phpunit.result.cache
+.ai/
+node_modules/
+.gitlab-ci-local/
+MEMORY.md
