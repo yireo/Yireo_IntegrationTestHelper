@@ -3,8 +3,8 @@
 namespace Yireo\IntegrationTestHelper\Check;
 
 use Cm_Cache_Backend_Redis;
+use Throwable;
 use Yireo\IntegrationTestHelper\Utilities\CurrentInstallConfig;
-use Zend_Cache_Exception;
 
 class RedisCheck
 {
@@ -33,13 +33,16 @@ class RedisCheck
             $redis = new Cm_Cache_Backend_Redis([
                 'server' => $server,
                 'port' => $port,
-                'database' => $dbName
+                'database' => $dbName,
+                'timeout' => 3,
+                'connect_retries' => 1,
             ]);
-        } catch (Zend_Cache_Exception $e) {
+
+            $info = $redis->getInfo();
+        } catch (Throwable $e) {
             return false;
         }
 
-        $info = $redis->getInfo();
         return !empty($info);
     }
 }

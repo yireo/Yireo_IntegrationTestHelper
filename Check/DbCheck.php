@@ -4,7 +4,6 @@ namespace Yireo\IntegrationTestHelper\Check;
 
 use PDO;
 use PDOException;
-use Laminas\Db\Adapter\Driver\Pdo\ConnectionFactory;
 use Yireo\IntegrationTestHelper\Utilities\CurrentInstallConfig;
 
 class DbCheck
@@ -20,17 +19,28 @@ class DbCheck
     public function checkDbConnection(): bool
     {
         $config = $this->currentInstallConfig->getValues();
-        $host = $config['db-host'];
-        $user = $config['db-user'];
-        $pass = $config['db-password'];
-        $dbName = $config['db-name'];
+        $host = (string)($config['db-host'] ?? '');
+        $port = (string)($config['db-port'] ?? '');
+        $user = (string)($config['db-user'] ?? '');
+        $pass = (string)($config['db-password'] ?? '');
+        $dbName = (string)($config['db-name'] ?? '');
 
-        try {
-            $pdo = new PDO('mysql:host=' . $host . ';dbname=' . $dbName, $user, $pass);
-            return true;
-        } catch (PDOException $e) {
+        foreach ([$host, $port, $dbName] as $dsnPart) {
+            if (str_contains($dsnPart, ';')) {
+                return false;
+            }
         }
 
-        return false;
+        $dsn = 'mysql:host=' . $host . ';dbname=' . $dbName;
+        if ($port !== '') {
+            $dsn .= ';port=' . $port;
+        }
+
+        try {
+            new PDO($dsn, $user, $pass, [PDO::ATTR_TIMEOUT => 3]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }

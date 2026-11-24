@@ -29,12 +29,18 @@ class SearchEngineCheck
             $portKey = 'opensearch-port';
         }
 
-        $configHostKey = $config[$hostKey] ?? 'localhost';
-        $configPortKey = $config[$portKey] ?? '9200';
+        $host = (string)($config[$hostKey] ?? 'localhost');
+        $port = (string)($config[$portKey] ?? '9200');
+
+        if (!preg_match('#^https?://#i', $host)) {
+            $host = 'http://' . $host;
+        }
 
         try {
-
-            $response = $this->httpClient->get($configHostKey.':'.$configPortKey);
+            $response = $this->httpClient->get($host . ':' . $port, [
+                'timeout' => 3,
+                'connect_timeout' => 3,
+            ]);
         } catch (GuzzleException $e) {
             return false;
         }
