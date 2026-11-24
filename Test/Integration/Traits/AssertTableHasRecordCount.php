@@ -12,8 +12,8 @@ trait AssertTableHasRecordCount
     {
         $resourceConnection = ObjectManager::getInstance()->get(ResourceConnection::class);
         $connection = $resourceConnection->getConnection();
-        $query = 'SELECT COUNT(*) FROM ' . $connection->getTableName($tableName);
-        $actualCount = (int)$connection->fetchOne($query);
+        $select = $connection->select()->from($connection->getTableName($tableName), ['COUNT(*)']);
+        $actualCount = (int)$connection->fetchOne($select);
         $this->assertEquals($expectedCount, $actualCount);
     }
 }
