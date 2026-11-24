@@ -1,0 +1,7 @@
+/.github export-ignore
+/.env export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
+/.yireo-extension-builder.json export-ignore
+/.yireo-extension-checker.json export-ignore
+/doc export-ignore
