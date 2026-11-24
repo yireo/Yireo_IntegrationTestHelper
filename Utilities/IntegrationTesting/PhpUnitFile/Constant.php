@@ -47,8 +47,8 @@ class Constant
     {
         $content = $this->phpUnitFile->getContent();
 
-        if (preg_match('/<const name="' . $name . '"(.*)value="([^\"]+)"([^>]+)>/', $content, $match)) {
-            return $match[2];
+        if (preg_match($this->getRegex($name), $content, $match)) {
+            return htmlspecialchars_decode($match[1], ENT_XML1 | ENT_QUOTES);
         }
 
         throw new ConstantNotFound((string)__('Unable to find constant'));
@@ -66,14 +66,24 @@ class Constant
     {
         $content = $this->phpUnitFile->getContent();
 
-        $newValue = '<const name="' . $name . '" value="' . $value . '"/>';
-        $regex = '/<const name="' . $name . '"(.*)value="([^\"]+)"([^>]+)>/';
+        $newValue = '<const name="' . $this->escape($name) . '" value="' . $this->escape($value) . '"/>';
+        $newContent = preg_replace_callback($this->getRegex($name), fn () => $newValue, $content);
 
-        if ($newContent = preg_replace($regex, $newValue, $content)) {
-            $this->phpUnitFile->writeContent($newContent);
-            return true;
+        if (!is_string($newContent) || $newContent === $content) {
+            return false;
         }
 
-        return false;
+        $this->phpUnitFile->writeContent($newContent);
+        return true;
+    }
+
+    private function getRegex(string $name): string
+    {
+        return '/<const\s+name="' . preg_quote($this->escape($name), '/') . '"[^>]*?\svalue="([^"]*)"[^>]*>/';
+    }
+
+    private function escape(string $value): string
+    {
+        return htmlspecialchars($value, ENT_XML1 | ENT_QUOTES);
     }
 }
