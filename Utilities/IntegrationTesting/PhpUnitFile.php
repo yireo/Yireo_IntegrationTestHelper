@@ -70,7 +70,7 @@ class PhpUnitFile
     public function writeContent(string $content): bool
     {
         if ($this->validateContent($content) === false) {
-            throw new InvalidContent(sprintf('Content is invalid: %s', $content));
+            throw new InvalidContent('Content is not a valid PHPUnit configuration');
         }
 
         $file = $this->getFilePath();
@@ -94,7 +94,7 @@ class PhpUnitFile
         $content = (string)$read->readAll();
 
         if ($this->validateContent($content) === false) {
-            throw new InvalidContent(sprintf('Content of file "%s" is invalid: %s', $file, $content));
+            throw new InvalidContent(sprintf('Content of file "%s" is not a valid PHPUnit configuration', $file));
         }
 
         return $content;

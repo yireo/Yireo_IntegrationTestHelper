@@ -295,6 +295,10 @@ class DisableModules
 
         // phpcs:ignore
         $config = require($configFile);
+        if (!is_array($config) || !isset($config['modules']) || !is_array($config['modules'])) {
+            return [];
+        }
+
         return $config['modules'];
     }
 

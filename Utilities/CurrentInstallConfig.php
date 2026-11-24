@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\SearchConfigOptionsList;
+use RuntimeException;
 
 class CurrentInstallConfig
 {
@@ -40,13 +41,21 @@ class CurrentInstallConfig
         $autoloadWrapper->addPsr4('Magento\\TestFramework\\', "{$testsBaseDir}/framework/Magento/TestFramework/");
         $autoloadWrapper->addPsr4('Magento\\', "{$testsBaseDir}/testsuite/Magento/");
 
-        $installConfig = $integrationTestsDir . '/etc/install-config-mysql.php';
+        $installConfig = $integrationTestsDir . 'etc/install-config-mysql.php';
         if (!$this->fileDriver->isExists($installConfig)) {
             $installConfig = $installConfig . '.dist';
         }
 
+        if (!$this->fileDriver->isExists($installConfig)) {
+            throw new RuntimeException('Install configuration "' . $installConfig . '" not found');
+        }
+
         // phpcs:ignore
         $installConfigValues = require($installConfig);
+        if (!is_array($installConfigValues)) {
+            throw new RuntimeException('Install configuration "' . $installConfig . '" does not return an array');
+        }
+
         $values = $this->defaultInstallConfig->getValues();
 
         return array_merge($values, $installConfigValues);
