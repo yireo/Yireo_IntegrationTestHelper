@@ -5,6 +5,7 @@ namespace Yireo\IntegrationTestHelper\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Yireo\IntegrationTestHelper\Check\RedisCheck;
 use Yireo\IntegrationTestHelper\Exception\IntegrationTesting\PhpUnitFile\ConstantNotFound;
@@ -53,7 +54,8 @@ class CheckCommand extends Command
     protected function configure(): void
     {
         $this->setName('integration_tests:check')
-            ->setDescription('Perform a simple check before running integration tests');
+            ->setDescription('Perform a simple check before running integration tests')
+            ->addOption('show-secrets', null, InputOption::VALUE_NONE, 'Show secrets like the DB password');
     }
 
     /**
@@ -73,7 +75,13 @@ class CheckCommand extends Command
         $table->addRow(['DB host', $this->currentInstallConfig->getValue('db-host')]);
 
         $table->addRow(['DB username', $this->currentInstallConfig->getValue('db-user')]);
-        $table->addRow(['DB password', $this->currentInstallConfig->getValue('db-password')]);
+        $table->addRow([
+            'DB password',
+            $this->getSecret(
+                (string)$this->currentInstallConfig->getValue('db-password'),
+                (bool)$input->getOption('show-secrets')
+            )
+        ]);
         $table->addRow(['DB name', $this->currentInstallConfig->getValue('db-name')]);
         $table->addRow(['DB reachable', $this->getDbReachable()]);
 
@@ -87,6 +95,15 @@ class CheckCommand extends Command
         $table->render();
 
         return Command::SUCCESS;
+    }
+
+    private function getSecret(string $value, bool $showSecrets): string
+    {
+        if ($value === '') {
+            return '(empty)';
+        }
+
+        return $showSecrets ? $value : '********';
     }
 
     /**
