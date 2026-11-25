@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.24] - 25 November 2026
+### Changed
+- Supported PHP versions are now 8.2 to 8.5: PHP 8.5 is added, PHP 8.0 and 8.1 are dropped
+
+### Fixed
+- Enabling the tested module now also enables the modules it depends on (recursively), instead of leaving them disabled after `module:enable --all` when `module-map.json` is missing
+- Type error thrown when `phpunit.xml` could not be found
+- `integration_tests:generate-module-mapping` reports an error instead of failing silently when the module map cannot be written
+
+### Security
+- Shell arguments are escaped when reading the integration test install configuration, and `InstallConfigExec.php` refuses to run outside the CLI
+- `integration_tests:check` masks the DB password unless `--show-secrets` is passed
+- Constant names and values are XML-escaped when changing `phpunit.xml` constants
+- Table name is quoted in `assertTableHasRecordCount()` to prevent SQL injection
+- DB, Redis and search engine checks validate their DSN and use connection timeouts
+- Invalid install and module configuration files are rejected, and file contents no longer leak into exception messages
+- CI scripts and development files are excluded from the Composer dist archive
+
 ## [0.0.23] - 13 June 2026
 ### Fixed
 - Bump constraints
