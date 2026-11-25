@@ -21,8 +21,7 @@
         "ext-pcre": "*",
         "guzzlehttp/guzzle": "^6.0|^7.0",
         "phpunit/phpunit": "^10.5|^11.0|^12.0",
-        "symfony/console": "^5.0|^6.0|^7.0",
-        "yireo/magento2-integration-test-helper": "~0.0"
+        "symfony/console": "^5.0|^6.0|^7.0"
     },
     "autoload": {
         "psr-4": {
